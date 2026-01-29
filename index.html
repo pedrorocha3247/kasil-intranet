@@ -7,8 +7,8 @@
     <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Babel para JSX no navegador -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- Lucide Icons -->
@@ -17,7 +17,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f0f0f0; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
-        /* Animação suave entre telas */
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -26,6 +25,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
+        // Extração segura dos ícones
         const { 
             Search, Calendar, Bell, ChevronRight, TrendingUp, 
             ExternalLink, ArrowLeft, Download, Filter, Home, 
@@ -45,6 +45,22 @@
                 { nome: 'IPC-R', mes: 'Dez/25', var: '-0,01%', status: 'down' },
             ];
 
+            const dadosIndicadores = {
+                principais: [
+                    { titulo: 'VALOR US', valor: 'R$ 3,0267', sub: 'Janeiro/2026' },
+                    { titulo: 'SALÁRIO MÍNIMO', valor: 'R$ 1.621,00', sub: 'Vigente' },
+                ],
+                titulosSlim: {
+                    valorBase: 'R$ 50.000,00',
+                    multiplicadores: ['1x', '12x', '18x', '24x', '36x']
+                },
+                slimPrecos: [
+                    { desc: 'COM CONSTRUÇÃO', valor: 'R$ 309,00' },
+                    { desc: 'SOMENTE LOTE', valor: 'R$ 103,00' },
+                    { desc: 'EMPREENDIMENTO 97', valor: 'R$ 309,00' },
+                ]
+            };
+
             const taxasConservacao = [
                 { nome: 'NVIER', valor: '434,11' },
                 { nome: 'NVIIER', valor: '434,11' },
@@ -58,6 +74,12 @@
                 { nome: 'RSC I', valor: '973,70' },
                 { nome: 'RSC II', valor: '934,05' },
             ];
+
+            // Helper para renderizar ícones React com Lucide via CDN
+            const Icon = ({ name, ...props }) => {
+                const LucideIcon = lucide[name];
+                return LucideIcon ? <LucideIcon {...props} /> : null;
+            };
 
             return (
                 <div className="min-h-screen flex flex-col">
@@ -75,7 +97,7 @@
                         
                         <div className="flex-1 max-w-xl px-10 hidden md:block">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                                <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                                 <input 
                                     type="text" 
                                     placeholder="Pesquise pelo site" 
@@ -107,7 +129,7 @@
                                         <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3">
                                             <div className="bg-[#e31e24] w-14 h-6 rounded-t-lg shadow-sm"></div>
                                         </div>
-                                        <h3 className="text-[#e31e24] font-bold text-lg mb-6 mt-4 uppercase tracking-tighter">Atividades Pendentes</h3>
+                                        <h3 className="text-[#e31e24] font-bold text-lg mb-6 mt-4 uppercase tracking-tighter text-center">Atividades Pendentes</h3>
                                         <div className="w-full space-y-5 text-[11px] text-gray-600 leading-relaxed overflow-y-auto pr-2 h-full scrollbar-hide">
                                             <div className="flex gap-3">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 shrink-0"></div>
@@ -127,17 +149,17 @@
                                     {/* Comunicados */}
                                     <div className="col-span-12 lg:col-span-5 space-y-6">
                                         <div className="bg-[#fffbe6] rounded p-4 border-l-4 border-[#e31e24] shadow-sm">
-                                            <h3 className="text-red-700 font-bold text-xs uppercase flex items-center gap-2 tracking-widest"><Bell size={14}/> Comunicados</h3>
+                                            <h3 className="text-red-700 font-bold text-xs uppercase flex items-center gap-2 tracking-widest"><Icon name="Bell" size={14}/> Comunicados</h3>
                                             <p className="text-[11px] text-red-800 mt-2 font-medium">• SCK: seu login e senha são pessoais e intransferíveis.</p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="bg-white rounded p-4 border-t-4 border-blue-400 shadow-sm flex items-center justify-between group cursor-pointer">
                                                 <h4 className="text-blue-400 font-bold text-[10px] uppercase tracking-widest">Antenado</h4>
-                                                <ChevronRight size={14} className="text-blue-200 group-hover:text-blue-400" />
+                                                <Icon name="ChevronRight" size={14} className="text-blue-200 group-hover:text-blue-400" />
                                             </div>
                                             <div className="bg-white rounded p-4 border-t-4 border-green-500 shadow-sm flex items-center justify-between group cursor-pointer">
                                                 <h4 className="text-green-500 font-bold text-[10px] uppercase tracking-widest">Mais Acessados</h4>
-                                                <ChevronRight size={14} className="text-green-200 group-hover:text-green-400" />
+                                                <Icon name="ChevronRight" size={14} className="text-green-200 group-hover:text-green-400" />
                                             </div>
                                         </div>
                                     </div>
@@ -145,10 +167,10 @@
                                     {/* Agenda e Indicadores Rápidos */}
                                     <div className="col-span-12 lg:col-span-3 space-y-4">
                                         <div className="bg-[#e31e24] rounded-sm shadow-md overflow-hidden text-white">
-                                            <div className="px-2 py-1 text-[9px] font-bold uppercase flex justify-between border-b border-white/20">Agenda <ChevronRight size={12}/></div>
+                                            <div className="px-2 py-1 text-[9px] font-bold uppercase flex justify-between border-b border-white/20">Agenda <Icon name="ChevronRight" size={12}/></div>
                                             <div className="p-3 flex items-center gap-4">
                                                 <div className="bg-white text-[#e31e24] rounded p-1 text-center min-w-[55px]">
-                                                    <Calendar size={20} className="mx-auto" />
+                                                    <Icon name="Calendar" size={20} className="mx-auto" />
                                                     <span className="text-xl font-black block leading-none">29</span>
                                                     <span className="text-[7px] uppercase font-bold">Janeiro</span>
                                                 </div>
@@ -160,7 +182,7 @@
                                         </div>
 
                                         <div onClick={() => setView('indicators')} className="bg-[#e0e0e0] rounded-sm shadow-md overflow-hidden cursor-pointer group hover:bg-white transition-all border border-gray-300">
-                                            <div className="px-2 py-1 text-[9px] font-bold uppercase text-gray-500 flex justify-between border-b border-gray-300">Indicadores de Janeiro <ChevronRight size={12}/></div>
+                                            <div className="px-2 py-1 text-[9px] font-bold uppercase text-gray-500 flex justify-between border-b border-gray-300">Indicadores de Janeiro <Icon name="ChevronRight" size={12}/></div>
                                             <div className="p-3 space-y-2 text-[11px] bg-white/50">
                                                 <div className="flex justify-between"><span>Valor US:</span><span className="font-bold">R$ 3,0267</span></div>
                                                 <div className="pt-2 border-t border-gray-300 flex flex-col">
@@ -173,15 +195,15 @@
                                     </div>
                                 </div>
 
-                                {/* PAINEL DE ÍNDICES ECONÓMICOS (NOVO) */}
+                                {/* PAINEL DE ÍNDICES ECONÓMICOS */}
                                 <div className="bg-white rounded shadow-md border-t-4 border-[#0056b3] overflow-hidden">
                                     <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <TrendingUp size={18} className="text-[#0056b3]" />
-                                            <h3 className="font-bold text-[#0056b3] text-xs uppercase tracking-widest">Índices Económicos</h3>
+                                            <Icon name="TrendingUp" size={18} className="text-[#0056b3]" />
+                                            <h3 className="font-bold text-[#0056b3] text-xs uppercase tracking-widest">Índices Econômicos</h3>
                                         </div>
                                         <button onClick={() => setView('history')} className="text-[10px] text-gray-400 hover:text-[#0056b3] flex items-center gap-1 font-black uppercase tracking-wider transition-colors">
-                                            Histórico Completo <ExternalLink size={12} />
+                                            Histórico Completo <Icon name="ExternalLink" size={12} />
                                         </button>
                                     </div>
                                     <div className="overflow-x-auto scrollbar-hide">
@@ -204,70 +226,72 @@
                             </div>
                         )}
 
-                        {/* VISÃO DE INDICADORES (DETALHADA) */}
                         {view === 'indicators' && (
                             <div className="fade-in max-w-6xl mx-auto bg-white rounded shadow-xl border overflow-hidden">
                                 <div className="p-3 border-b bg-gray-50 flex items-center justify-between">
                                     <h2 className="text-sm font-black text-gray-600 uppercase tracking-widest">Indicadores</h2>
-                                    <button onClick={() => setView('dashboard')} className="p-1 hover:bg-gray-200 rounded text-gray-400"><X size={20} /></button>
+                                    <button onClick={() => setView('dashboard')} className="p-1 hover:bg-gray-200 rounded text-gray-400"><Icon name="X" size={20} /></button>
                                 </div>
 
                                 <div className="p-8 grid grid-cols-12 gap-y-10 gap-x-8">
                                     {/* Bloco Superior: Valor US e Títulos Slim */}
-                                    <div className="col-span-3">
+                                    <div className="col-span-12 md:col-span-3">
                                         <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Valor US</p>
-                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">R$ 3,0267</p>
+                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.principais[0].valor}</p>
                                     </div>
-                                    <div className="col-span-6">
+                                    <div className="col-span-12 md:col-span-6">
                                         <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Títulos Slim</p>
-                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">R$ 50.000,00</p>
-                                        <div className="flex gap-2 mt-4">
-                                            {['1x', '12x', '18x', '24x', '36x'].map(m => (
+                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.titulosSlim.valorBase}</p>
+                                        <div className="flex flex-wrap gap-2 mt-4">
+                                            {dadosIndicadores.titulosSlim.multiplicadores.map(m => (
                                                 <button key={m} className={`px-4 py-1 text-[11px] font-black rounded-full border ${m === '1x' ? 'bg-[#0056b3] border-[#0056b3] text-white' : 'border-gray-200 text-gray-400 hover:border-gray-300'}`}>{m}</button>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="col-span-3 border-l pl-8 row-span-2">
+                                    <div className="col-span-12 md:col-span-3 border-l md:pl-8 row-span-2">
                                         <p className="text-xl font-light text-gray-400 uppercase tracking-widest mb-6">Slim</p>
                                         <div className="space-y-6">
-                                            <div><p className="text-xl font-black text-gray-800">R$ 309,00</p><p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Com construção</p></div>
-                                            <div><p className="text-xl font-black text-gray-800">R$ 103,00</p><p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Somente lote</p></div>
-                                            <div><p className="text-xl font-black text-gray-800">R$ 309,00</p><p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Empreendimento 97</p></div>
+                                            {dadosIndicadores.slimPrecos.map((item, i) => (
+                                                <div key={i}>
+                                                    <p className="text-xl font-black text-gray-800">{item.valor}</p>
+                                                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{item.desc}</p>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
 
                                     {/* Bloco Médio: Salário Mínimo e Selector NVIIER */}
-                                    <div className="col-span-3 border-t pt-8">
+                                    <div className="col-span-12 md:col-span-3 border-t pt-8">
                                         <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Salário mínimo</p>
-                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">R$ 1.621,00</p>
+                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.principais[1].valor}</p>
                                     </div>
-                                    <div className="col-span-6 border-t pt-8">
+                                    <div className="col-span-12 md:col-span-6 border-t pt-8">
                                         <div className="flex items-center justify-center gap-8 mb-6">
-                                            <ChevronLeft size={24} className="text-gray-300 cursor-pointer hover:text-gray-500" />
+                                            <Icon name="ChevronLeft" size={24} className="text-gray-300 cursor-pointer hover:text-gray-500" />
                                             <span className="text-2xl font-black text-gray-800 uppercase tracking-[0.2em]">NVIIER</span>
-                                            <ChevronRight size={24} className="text-gray-300 cursor-pointer hover:text-gray-500" />
+                                            <Icon name="ChevronRight" size={24} className="text-gray-300 cursor-pointer hover:text-gray-500" />
                                         </div>
                                         <div className="grid grid-cols-3 gap-6">
                                             <div className="text-center">
                                                 <p className="text-lg font-light text-gray-400 uppercase">TALA</p>
                                                 <p className="text-base font-black text-gray-700">R$ 808,27</p>
-                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase">MAR/2019 <ChevronRight size={10}/></div>
+                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase tracking-tighter">MAR/2019 <Icon name="ChevronRight" size={10}/></div>
                                             </div>
                                             <div className="text-center">
                                                 <p className="text-lg font-light text-gray-400 uppercase">TAMA</p>
                                                 <p className="text-base font-black text-gray-700">5,07</p>
-                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase">DEZ/2025 <ChevronRight size={10}/></div>
+                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase tracking-tighter">DEZ/2025 <Icon name="ChevronRight" size={10}/></div>
                                             </div>
                                             <div className="text-center">
                                                 <p className="text-lg font-light text-gray-400 uppercase">TSH</p>
                                                 <p className="text-base font-black text-gray-700">R$ 133,27</p>
-                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase">MAR/2019 <ChevronRight size={10}/></div>
+                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase tracking-tighter">MAR/2019 <Icon name="ChevronRight" size={10}/></div>
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Tabelas Inferiores */}
-                                    <div className="col-span-3 border-t pt-8">
+                                    <div className="col-span-12 md:col-span-3 border-t pt-8">
                                         <p className="text-xl font-light text-gray-400 uppercase leading-none mb-2">Cotação<br/>OTNMEI</p>
                                         <div className="flex justify-between items-center py-2 border-b"><span className="text-[11px] font-bold text-gray-400 uppercase">Valor atual:</span><span className="text-sm font-black text-black tracking-tight">R$ 127,92</span></div>
                                         <table className="w-full mt-4 text-[11px]">
@@ -275,7 +299,7 @@
                                             <tbody className="text-gray-700 font-black"><tr className="border-b"><td className="py-2">DEZ/2025</td><td className="text-right">R$ 127,93</td></tr><tr className="border-b"><td className="py-2">NOV/2025</td><td className="text-right">R$ 127,59</td></tr></tbody>
                                         </table>
                                     </div>
-                                    <div className="col-span-4 border-t pt-8 px-4 border-l border-r">
+                                    <div className="col-span-12 md:col-span-4 border-t pt-8 md:px-4 border-l border-r">
                                         <p className="text-xl font-light text-gray-400 uppercase tracking-tighter">Taxa de conservação</p>
                                         <table className="w-full mt-5 text-[11px]">
                                             <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Empreendimento</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
@@ -284,7 +308,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div className="col-span-5 border-t pt-8">
+                                    <div className="col-span-12 md:col-span-5 border-t pt-8">
                                         <p className="text-xl font-light text-gray-400 uppercase tracking-tighter">Melhoramentos</p>
                                         <table className="w-full mt-5 text-[11px]">
                                             <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Empreendimento</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
@@ -297,12 +321,11 @@
                             </div>
                         )}
 
-                        {/* VISÃO DE HISTÓRICO DE ÍNDICES (RESTAURADO) */}
                         {view === 'history' && (
                             <div className="fade-in">
                                 <div className="bg-[#f8f9fa] border-b p-4 flex items-center justify-between mb-4 shadow-sm rounded-t-lg">
                                     <button onClick={() => setView('dashboard')} className="flex items-center gap-2 text-[11px] font-black text-gray-400 hover:text-gray-700 uppercase tracking-widest transition-colors">
-                                        <ArrowLeft size={14} /> Voltar ao Dashboard
+                                        <Icon name="ArrowLeft" size={14} /> Voltar ao Dashboard
                                     </button>
                                     <h2 className="text-sm font-black text-[#0056b3] uppercase tracking-[0.2em]">Histórico de Índices</h2>
                                     <div className="w-24"></div>
@@ -339,7 +362,7 @@
                             </div>
                         )}
 
-                        {/* Logos das Empresas (Rodapé Corporativo) */}
+                        {/* Logos das Empresas */}
                         <footer className="mt-20 py-12 flex justify-center items-center gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-1000 border-t border-gray-200">
                             <div className="text-xl font-black italic text-gray-500 uppercase tracking-tighter">momentum</div>
                             <div className="text-2xl font-black text-gray-500 flex items-baseline tracking-tighter uppercase">slim<span className="text-[10px] font-normal not-italic ml-0.5">®</span></div>
