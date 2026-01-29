@@ -176,6 +176,36 @@
                         
                         {view === 'dashboard' && (
                             <div className="fade-in space-y-8">
+                                {/* PAINEL DE ÍNDICES ECONÔMICOS (AGORA NO TOPO) */}
+                                <div className="bg-white rounded shadow-md border-t-4 border-[#0056b3] overflow-hidden">
+                                    <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <Icon name="TrendingUp" size={18} className="text-[#0056b3]" />
+                                            <h3 className="font-bold text-[#0056b3] text-xs uppercase tracking-widest">Índices Econômicos</h3>
+                                        </div>
+                                        <button onClick={() => setView('history')} className="text-[10px] text-gray-400 hover:text-[#0056b3] flex items-center gap-1 font-black uppercase tracking-wider transition-colors">
+                                            Histórico Completo <Icon name="ExternalLink" size={12} />
+                                        </button>
+                                    </div>
+                                    <div className="overflow-x-auto scrollbar-hide bg-white">
+                                        <div className="flex min-w-full">
+                                            {indicesResumo.map((item, idx) => (
+                                                <div key={idx} className="flex-1 min-w-[180px] p-4 border-r border-gray-100 last:border-r-0 hover:bg-blue-50 transition-colors cursor-default">
+                                                    <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 truncate">{item.nome}</div>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className={`text-xl font-black ${item.status === 'up' ? 'text-green-600' : 'text-red-600'}`}>{item.var}</span>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[8px] text-gray-400 font-bold uppercase leading-none mb-1">{item.mes}</span>
+                                                            {item.valor && <span className="text-[10px] font-black text-gray-700 leading-none">{item.valor}</span>}
+                                                            {item.acumulado && <span className="text-[10px] font-black text-gray-700 leading-none">{item.acumulado}</span>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="grid grid-cols-12 gap-6">
                                     {/* Atividades Pendentes */}
                                     <div className="col-span-12 lg:col-span-4 bg-white rounded shadow-md h-full min-h-[420px] flex flex-col items-center p-6 border-t-4 border-[#e31e24] relative">
@@ -244,36 +274,6 @@
                                                 </div>
                                                 <button className="w-full text-center text-[9px] font-black uppercase text-gray-400 mt-2 py-1 bg-gray-50 border border-gray-200 rounded-sm hover:text-[#0056b3]">Ver todos</button>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* PAINEL DE ÍNDICES ECONÔMICOS (EXPANDIDO) */}
-                                <div className="bg-white rounded shadow-md border-t-4 border-[#0056b3] overflow-hidden">
-                                    <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <Icon name="TrendingUp" size={18} className="text-[#0056b3]" />
-                                            <h3 className="font-bold text-[#0056b3] text-xs uppercase tracking-widest">Índices Econômicos</h3>
-                                        </div>
-                                        <button onClick={() => setView('history')} className="text-[10px] text-gray-400 hover:text-[#0056b3] flex items-center gap-1 font-black uppercase tracking-wider transition-colors">
-                                            Histórico Completo <Icon name="ExternalLink" size={12} />
-                                        </button>
-                                    </div>
-                                    <div className="overflow-x-auto scrollbar-hide bg-white">
-                                        <div className="flex min-w-full">
-                                            {indicesResumo.map((item, idx) => (
-                                                <div key={idx} className="flex-1 min-w-[180px] p-4 border-r border-gray-100 last:border-r-0 hover:bg-blue-50 transition-colors cursor-default">
-                                                    <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 truncate">{item.nome}</div>
-                                                    <div className="flex items-center gap-3">
-                                                        <span className={`text-xl font-black ${item.status === 'up' ? 'text-green-600' : 'text-red-600'}`}>{item.var}</span>
-                                                        <div className="flex flex-col">
-                                                            <span className="text-[8px] text-gray-400 font-bold uppercase leading-none mb-1">{item.mes}</span>
-                                                            {item.valor && <span className="text-[10px] font-black text-gray-700 leading-none">{item.valor}</span>}
-                                                            {item.acumulado && <span className="text-[10px] font-black text-gray-700 leading-none">{item.acumulado}</span>}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
                                         </div>
                                     </div>
                                 </div>
