@@ -39,6 +39,7 @@
         const Calendar = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>;
         const Bell = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>;
         const ChevronRight = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>;
+        const ChevronLeft = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>;
         const BarChart2 = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>;
         const Info = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>;
         const ExternalLink = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>;
@@ -59,7 +60,148 @@
           </svg>
         );
 
-        // --- Configuração dos Índices ---
+        // --- COMPONENTE DETALHES DOS INDICADORES (NOVO) ---
+        const DetailedIndicators = ({ onClose }) => {
+            const taxas = [
+                { nome: 'NVIER', valor: '434,11' },
+                { nome: 'NVIIER', valor: '434,11' },
+                { nome: 'RSC I', valor: '434,11' },
+                { nome: 'RSC II', valor: '434,11' },
+                { nome: 'RSC III', valor: '434,11' },
+            ];
+
+            const melhoramentos = [
+                { nome: 'NVIER', valor: '802,88' },
+                { nome: 'NVIIER', valor: '896,00' },
+                { nome: 'RSC I', valor: '973,70' },
+                { nome: 'RSC II', valor: '934,05' },
+                { nome: 'RSC III', valor: '1.095,57' },
+            ];
+
+            return (
+                <div className="bg-white rounded-lg shadow-xl border overflow-hidden animate-scale-in mb-8">
+                    {/* Header */}
+                    <div className="p-4 border-b flex items-center justify-between bg-white">
+                        <h2 className="text-lg font-bold text-gray-700">Indicadores</h2>
+                        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full text-gray-400">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    <div className="p-6">
+                        {/* Linha Superior: Financeiro e Slim */}
+                        <div className="grid grid-cols-12 gap-8 mb-8 border-b pb-8">
+                            {/* Valor US e Salário Mínimo */}
+                            <div className="col-span-12 md:col-span-3 space-y-6">
+                                <div>
+                                    <p className="text-xl font-light text-gray-500 mb-1">Valor US</p>
+                                    <p className="text-2xl font-black text-gray-800">R$ 3,0267</p>
+                                </div>
+                                <div>
+                                    <p className="text-xl font-light text-gray-500 mb-1">Salário mínimo</p>
+                                    <p className="text-2xl font-black text-gray-800">R$ 1.621,00</p>
+                                </div>
+                            </div>
+
+                            {/* Títulos Slim */}
+                            <div className="col-span-12 md:col-span-6 border-l border-gray-100 pl-8">
+                                <div className="mb-4">
+                                    <p className="text-xl font-light text-gray-500 mb-1">Títulos Slim</p>
+                                    <p className="text-2xl font-black text-gray-800">R$ 50.000,00</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    {['1x', '12x', '18x', '24x', '36x'].map(mult => (
+                                        <span key={mult} className="px-3 py-1 bg-gray-100 text-xs font-bold text-gray-600 rounded-full cursor-pointer hover:bg-gray-200 transition-colors">
+                                            {mult}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Preços Slim */}
+                            <div className="col-span-12 md:col-span-3 border-l border-gray-100 pl-8">
+                                <p className="text-xl font-light text-gray-500 mb-4">Slim</p>
+                                <div className="space-y-4">
+                                    <div>
+                                        <p className="text-xl font-black text-gray-800 leading-none">R$ 309,00</p>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-1">Com construção</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xl font-black text-gray-800 leading-none">R$ 103,00</p>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-1">Somente lote</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xl font-black text-gray-800 leading-none">R$ 309,00</p>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase mt-1">Empreendimento 97</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Linha Inferior: Tabelas */}
+                        <div className="grid grid-cols-12 gap-8">
+                            {/* Taxa de Conservação */}
+                            <div className="col-span-12 md:col-span-6">
+                                <p className="text-xl font-light text-gray-500 mb-4">Taxa de conservação</p>
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b">
+                                            <th className="text-left py-2 text-xs font-bold text-gray-400 uppercase">Empreendimento</th>
+                                            <th className="text-right py-2 text-xs font-bold text-gray-400 uppercase">Valor(R$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {taxas.map((item, idx) => (
+                                            <tr key={idx} className="border-b last:border-0 hover:bg-gray-50">
+                                                <td className="py-3 text-sm font-bold text-gray-600 uppercase">{item.nome}</td>
+                                                <td className="py-3 text-sm font-bold text-gray-800 text-right">{item.valor}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <div className="flex justify-end items-center gap-2 mt-2 text-xs text-gray-400 font-medium">
+                                    <span>1-5 de 11</span>
+                                    <div className="flex gap-1">
+                                        <button className="p-1 hover:bg-gray-100 rounded"><ChevronLeft className="w-4 h-4" /></button>
+                                        <button className="p-1 hover:bg-gray-100 rounded"><ChevronRight className="w-4 h-4" /></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Melhoramentos */}
+                            <div className="col-span-12 md:col-span-6 border-l border-gray-100 pl-8">
+                                <p className="text-xl font-light text-gray-500 mb-4">Melhoramentos</p>
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b">
+                                            <th className="text-left py-2 text-xs font-bold text-gray-400 uppercase">Empreendimento</th>
+                                            <th className="text-right py-2 text-xs font-bold text-gray-400 uppercase">Valor(R$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {melhoramentos.map((item, idx) => (
+                                            <tr key={idx} className="border-b last:border-0 hover:bg-gray-50">
+                                                <td className="py-3 text-sm font-bold text-gray-600 uppercase">{item.nome}</td>
+                                                <td className="py-3 text-sm font-bold text-gray-800 text-right">{item.valor}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <div className="flex justify-end items-center gap-2 mt-2 text-xs text-gray-400 font-medium">
+                                    <span>1-5 de 12</span>
+                                    <div className="flex gap-1">
+                                        <button className="p-1 hover:bg-gray-100 rounded"><ChevronLeft className="w-4 h-4" /></button>
+                                        <button className="p-1 hover:bg-gray-100 rounded"><ChevronRight className="w-4 h-4" /></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Configuração dos Índices, Dados e Modal Histórico (MANTIDOS) ---
         const indexConfig = {
             'IGP-M': { varKey: 'igpm_var', valKey: 'igpm_val', hasValue: true, singleTitle: 'IGP-M' },
             'OTN-MEI': { varKey: 'otn_var', valKey: 'otn_val', hasValue: true, singleTitle: 'OTN-MEI' },
@@ -72,150 +214,43 @@
             'IPC-FIPE': { varKey: 'ipcfipe', hasValue: false }
         };
 
-        // --- Dados Fictícios ---
         const dadosPorAno = {
-            '2026': [
-                { mes: 'Jan', igpm_var: '0,41%', igpm_val: '1.207,73', otn_var: '0,41%', otn_val: '128,44', ipca: '0,25%', ipcdi: '0,28%', ipcr: '-', cub: '-', igpdi: '-', inpc: '-', ipcfipe: '0,38%' },
-            ],
-            '2025': [
-                { mes: 'Dez', igpm_var: '0,10%', igpm_val: '1.199,68', otn_var: '0,27%', otn_val: '127,93', ipca: '0,56%', ipcdi: '0,15%', ipcr: '-0,01%', cub: '0,31%', igpdi: '0,10%', inpc: '0,40%', ipcfipe: '0,30%' },
-                { mes: 'Nov', igpm_var: '0,59%', igpm_val: '1.204,01', otn_var: '-0,36%', otn_val: '127,59', ipca: '0,28%', ipcdi: '0,33%', ipcr: '0,15%', cub: '0,25%', igpdi: '0,48%', inpc: '0,10%', ipcfipe: '0,25%' },
-                { mes: 'Out', igpm_var: '0,50%', igpm_val: '1.198,97', otn_var: '0,42%', otn_val: '128,05', ipca: '0,24%', ipcdi: '0,40%', ipcr: '0,20%', cub: '0,30%', igpdi: '0,51%', inpc: '0,22%', ipcfipe: '0,33%' },
-                { mes: 'Set', igpm_var: '0,37%', igpm_val: '1.194,67', otn_var: '0,36%', otn_val: '127,52', ipca: '0,26%', ipcdi: '0,35%', ipcr: '0,18%', cub: '0,22%', igpdi: '0,38%', inpc: '0,25%', ipcfipe: '0,28%' },
-                { mes: 'Ago', igpm_var: '0,29%', igpm_val: '1.203,94', otn_var: '-0,77%', otn_val: '127,06', ipca: '0,23%', ipcdi: '0,20%', ipcr: '0,10%', cub: '0,28%', igpdi: '0,30%', inpc: '0,20%', ipcfipe: '0,22%' },
-                { mes: 'Jul', igpm_var: '0,21%', igpm_val: '1.224,39', otn_var: '-1,67%', otn_val: '128,05', ipca: '0,12%', ipcdi: '0,15%', ipcr: '0,05%', cub: '0,20%', igpdi: '0,22%', inpc: '0,15%', ipcfipe: '0,18%' },
-                { mes: 'Jun', igpm_var: '0,10%', igpm_val: '1.230,42', otn_var: '-0,49%', otn_val: '130,22', ipca: '0,08%', ipcdi: '0,05%', ipcr: '-0,05%', cub: '0,15%', igpdi: '0,12%', inpc: '0,10%', ipcfipe: '0,10%' },
-                { mes: 'Mai', igpm_var: '-0,49%', igpm_val: '1.227,47', otn_var: '0,24%', otn_val: '130,86', ipca: '0,26%', ipcdi: '0,34%', ipcr: '-0,49%', cub: '0,60%', igpdi: '-0,40%', inpc: '0,35%', ipcfipe: '0,27%' },
-                { mes: 'Abr', igpm_var: '0,24%', igpm_val: '1.231,66', otn_var: '-0,34%', otn_val: '130,55', ipca: '0,43%', ipcdi: '0,52%', ipcr: '0,24%', cub: '0,27%', igpdi: '0,20%', inpc: '0,48%', ipcfipe: '0,45%' },
-                { mes: 'Mar', igpm_var: '-0,34%', igpm_val: '1.218,74', otn_var: '1,06%', otn_val: '130,99', ipca: '0,56%', ipcdi: '0,44%', ipcr: '-0,34%', cub: '0,12%', igpdi: '-0,20%', inpc: '0,51%', ipcfipe: '0,62%' },
-                { mes: 'Fev', igpm_var: '1,06%', igpm_val: '1.215,46', otn_var: '0,27%', otn_val: '129,62', ipca: '1,31%', ipcdi: '1,18%', ipcr: '1,06%', cub: '1,88%', igpdi: '1,00%', inpc: '1,48%', ipcfipe: '0,51%' },
-                { mes: 'Jan', igpm_var: '0,27%', igpm_val: '1.204,14', otn_var: '0,94%', otn_val: '129,27', ipca: '0,16%', ipcdi: '0,02%', ipcr: '0,27%', cub: '0,25%', igpdi: '0,11%', inpc: '0,00%', ipcfipe: '0,24%' },
-            ],
-            '2024': [
-                { mes: 'Dez', igpm_var: '0,94%', igpm_val: '1.188,69', otn_var: '1,30%', otn_val: '128,07', ipca: '0,52%', ipcdi: '0,31%', ipcr: '0,94%', cub: '0,17%', igpdi: '0,87%', inpc: '0,48%', ipcfipe: '0,34%' },
-            ]
+            '2026': [ { mes: 'Jan', igpm_var: '0,41%', igpm_val: '1.207,73', otn_var: '0,41%', otn_val: '128,44', ipca: '0,25%', ipcdi: '0,28%', ipcr: '-', cub: '-', igpdi: '-', inpc: '-', ipcfipe: '0,38%' } ],
+            '2025': [ { mes: 'Dez', igpm_var: '0,10%', igpm_val: '1.199,68', otn_var: '0,27%', otn_val: '127,93', ipca: '0,56%', ipcdi: '0,15%', ipcr: '-0,01%', cub: '0,31%', igpdi: '0,10%', inpc: '0,40%', ipcfipe: '0,30%' } ],
+            '2024': [ { mes: 'Dez', igpm_var: '0,94%', igpm_val: '1.188,69', otn_var: '1,30%', otn_val: '128,07', ipca: '0,52%', ipcdi: '0,31%', ipcr: '0,94%', cub: '0,17%', igpdi: '0,87%', inpc: '0,48%', ipcfipe: '0,34%' } ]
         };
 
-        // --- COMPONENTE MODAL DE HISTÓRICO ---
         const HistoryModal = ({ config, onClose }) => {
             const [selectedYear, setSelectedYear] = React.useState('2026');
-            
             if (!config.isOpen) return null;
-
             const dados = dadosPorAno[selectedYear] || [];
             const singleIndex = config.filterIndex ? indexConfig[config.filterIndex] : null;
-
-            const cleanText = (val) => {
-                if (!val) return '-';
-                return val.replace('%', '').replace('R$', '').trim();
-            };
-
-            const getTableTrendColor = (val) => {
-                if (!val || val.trim() === '-' || val.trim() === '') return 'text-neutral'; 
-                if (val.includes('-')) return 'table-text-down'; 
-                return 'table-text-up';
-            };
+            const cleanText = (val) => val ? val.replace('%', '').replace('R$', '').trim() : '-';
+            const getTableTrendColor = (val) => (!val || val.trim() === '-' || val.trim() === '') ? 'text-neutral' : (val.includes('-') ? 'table-text-down' : 'table-text-up');
 
             return (
                 <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-scale-in">
                     <div className="bg-white rounded-lg shadow-2xl w-full max-w-[95vw] flex flex-col overflow-hidden">
-                        
-                        {/* Header com Cores Invertidas */}
                         <div className="flex items-center justify-between p-4 border-b border-blue-800 bg-[#0056b3] shrink-0">
                             <div className="flex items-center gap-4">
-                                <div className="bg-white/20 p-2 rounded-md shadow-sm">
-                                    <BarChart2 className="w-5 h-5 text-white" />
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-black text-white uppercase tracking-widest">
-                                        {config.filterIndex ? `${config.filterIndex}` : 'Histórico de Índices'}
-                                    </h2>
-                                    <p className="text-xs text-blue-100 font-bold uppercase tracking-wide">Base de dados oficial</p>
-                                </div>
+                                <div className="bg-white/20 p-2 rounded-md shadow-sm"><BarChart2 className="w-5 h-5 text-white" /></div>
+                                <div><h2 className="text-xl font-black text-white uppercase tracking-widest">{config.filterIndex ? `${config.filterIndex}` : 'Histórico de Índices'}</h2><p className="text-xs text-blue-100 font-bold uppercase tracking-wide">Base de dados oficial</p></div>
                             </div>
-                            
                             <div className="flex items-center gap-3">
                                 <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded border border-blue-400/30 shadow-sm">
                                     <span className="text-xs font-black text-white uppercase tracking-wide">Ano:</span>
-                                    <select 
-                                        value={selectedYear} 
-                                        onChange={(e) => setSelectedYear(e.target.value)}
-                                        className="bg-transparent text-sm font-bold text-white outline-none cursor-pointer"
-                                    >
-                                        <option className="text-gray-800" value="2026">2026</option>
-                                        <option className="text-gray-800" value="2025">2025</option>
-                                        <option className="text-gray-800" value="2024">2024</option>
-                                    </select>
+                                    <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="bg-transparent text-sm font-bold text-white outline-none cursor-pointer"><option className="text-gray-800" value="2026">2026</option><option className="text-gray-800" value="2025">2025</option><option className="text-gray-800" value="2024">2024</option></select>
                                 </div>
-                                <button onClick={onClose} className="p-2 bg-white/20 rounded-full transition-colors text-white hover:bg-white/40">
-                                    <X className="w-5 h-5" />
-                                </button>
+                                <button onClick={onClose} className="p-2 bg-white/20 rounded-full transition-colors text-white hover:bg-white/40"><X className="w-5 h-5" /></button>
                             </div>
                         </div>
-
-                        {/* Tabela com LINHAS DE GRADE */}
-                        <div className="overflow-auto flex-1 bg-white px-6 py-4 space-y-0">
-                          {/* Cabeçalho da Tabela */}
-                          <div className="grid grid-cols-12 text-[11px] font-black uppercase tracking-widest text-[#0056b3] border border-gray-200 bg-gray-50 text-center">
-                            {singleIndex ? (
-                                <>
-                                    <div className="col-span-4 py-3 border-r border-gray-200 text-left px-4">Mês</div>
-                                    <div className="col-span-4 py-3 border-r border-gray-200">Variação</div>
-                                    {singleIndex.hasValue && <div className="col-span-4 py-3">Valor</div>}
-                                </>
-                            ) : (
-                                <>
-                                    <div className="col-span-1 py-3 border-r border-gray-200 text-left px-2">Mês</div>
-                                    <div className="col-span-2 py-3 border-r border-gray-200">IGP-M</div>
-                                    <div className="col-span-2 py-3 border-r border-gray-200">OTN-MEI</div>
-                                    <div className="col-span-1 py-3 border-r border-gray-200">IPCA</div>
-                                    <div className="col-span-1 py-3 border-r border-gray-200">IPC-DI</div>
-                                    <div className="col-span-1 py-3 border-r border-gray-200">IPC-R</div>
-                                    <div className="col-span-1 py-3 border-r border-gray-200">CUB</div>
-                                    <div className="col-span-1 py-3 border-r border-gray-200">IGP-DI</div>
-                                    <div className="col-span-1 py-3 border-r border-gray-200">INPC</div>
-                                    <div className="col-span-1 py-3">IPC-FIPE</div>
-                                </>
-                            )}
-                          </div>
-
-                          {/* Linhas da Tabela */}
-                          <div className="border-x border-b border-gray-200">
-                            {dados.map((row, idx) => (
-                                <div key={idx} className="grid grid-cols-12 items-center bg-white hover:bg-blue-50 transition text-sm font-bold text-center border-b border-gray-200 last:border-b-0">
-                                {singleIndex ? (
-                                    <>
-                                        <div className="col-span-4 py-3 border-r border-gray-200 text-gray-700 text-left px-4">{row.mes}</div>
-                                        <div className={`col-span-4 py-3 border-r border-gray-200 ${getTableTrendColor(row[singleIndex.varKey])}`}>{cleanText(row[singleIndex.varKey])}</div>
-                                        {singleIndex.hasValue && <div className="col-span-4 py-3 text-gray-500">{cleanText(row[singleIndex.valKey])}</div>}
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="col-span-1 py-3 border-r border-gray-200 text-gray-700 text-left px-2">{row.mes}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.igpm_var)}`}>{cleanText(row.igpm_var)}</div>
-                                        <div className="col-span-1 py-3 border-r border-gray-200 text-gray-500">{cleanText(row.igpm_val)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.otn_var)}`}>{cleanText(row.otn_var)}</div>
-                                        <div className="col-span-1 py-3 border-r border-gray-200 text-gray-500">{cleanText(row.otn_val)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.cub)}`}>{cleanText(row.cub)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</div>
-                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</div>
-                                        <div className={`col-span-1 py-3 ${getTableTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</div>
-                                    </>
-                                )}
-                                </div>
-                            ))}
-                          </div>
+                        <div className="bg-white rounded-b-lg shadow-xl border overflow-hidden mx-auto table-container">
+                            <table className="w-full text-center text-[10px] border-collapse min-w-[1000px]">
+                                <thead><tr className="bg-[#e9ecef] text-gray-600 uppercase font-black tracking-widest border-b"><th className="p-4 border-r sticky-col">Mês</th>{singleIndex ? <><th className="p-4 border-r">Variação</th>{singleIndex.hasValue && <th className="p-4">Valor</th>}</> : <><th className="p-4 border-r" colSpan="2">IGP-M</th><th className="p-4 border-r" colSpan="2">OTN-MEI</th><th className="p-4 border-r">IPCA</th><th className="p-4 border-r">IPC-DI</th><th className="p-4 border-r">IPC-R</th><th className="p-4 border-r">CUB</th><th className="p-4 border-r">IGP-DI</th><th className="p-4 border-r">INPC</th><th className="p-4">IPC-FIPE</th></>}</tr></thead>
+                                <tbody className="font-bold text-gray-800">{dados.map((row, idx) => (<tr key={idx} className="border-b hover:bg-blue-50/50"><td className="p-3 border-r sticky-col uppercase font-black bg-white">{row.mes}</td>{singleIndex ? <><td className={`p-3 border-r ${getTableTrendColor(row[singleIndex.varKey])}`}>{cleanText(row[singleIndex.varKey])}</td>{singleIndex.hasValue && <td className="p-3 text-gray-500">{cleanText(row[singleIndex.valKey])}</td>}</> : <><td className={`p-3 border-r ${getTableTrendColor(row.igpm_var)}`}>{cleanText(row.igpm_var)}</td><td className="p-3 border-r text-gray-500">{cleanText(row.igpm_val)}</td><td className={`p-3 border-r ${getTableTrendColor(row.otn_var)}`}>{cleanText(row.otn_var)}</td><td className="p-3 border-r text-gray-500">{cleanText(row.otn_val)}</td><td className={`p-3 border-r ${getTableTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</td><td className={`p-3 border-r ${getTableTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</td><td className={`p-3 border-r ${getTableTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</td><td className={`p-3 border-r ${getTableTrendColor(row.cub)}`}>{cleanText(row.cub)}</td><td className={`p-3 border-r ${getTableTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</td><td className={`p-3 border-r ${getTableTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</td><td className={`p-3 ${getTableTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</td></>}</tr>))}</tbody>
+                            </table>
                         </div>
-
-                        {/* Footer */}
-                        <div className="p-4 border-t bg-gray-50 flex justify-end shrink-0">
-                            <button onClick={onClose} className="px-6 py-2 bg-[#0056b3] text-white text-xs font-black uppercase tracking-widest rounded shadow hover:bg-blue-800 transition-colors">
-                                Fechar Tabela
-                            </button>
-                        </div>
+                        <div className="p-4 border-t bg-gray-50 flex justify-end shrink-0"><button onClick={onClose} className="px-6 py-2 bg-[#0056b3] text-white text-xs font-black uppercase tracking-widest rounded shadow hover:bg-blue-800 transition-colors">Fechar Tabela</button></div>
                     </div>
                 </div>
             );
@@ -224,6 +259,8 @@
         // --- APP PRINCIPAL ---
         const App = () => {
           const [modalConfig, setModalConfig] = React.useState({ isOpen: false, filterIndex: null });
+          // Novo estado para controlar a visualização: 'dashboard' ou 'indicators'
+          const [currentView, setCurrentView] = React.useState('dashboard');
 
           const openModal = (indexName = null) => {
               setModalConfig({ isOpen: true, filterIndex: indexName });
@@ -249,41 +286,30 @@
             <div className="min-h-screen bg-[#f0f0f0] font-sans text-gray-700">
               <HistoryModal config={modalConfig} onClose={closeModal} />
 
-              {/* HEADER ALTERADO: Fundo AZUL (#0056b3), Textos ESCUROS (#333) */}
-              <header className="bg-[#0056b3] h-14 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
-                <div className="flex items-center gap-2">
+              {/* HEADER */}
+              <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => setCurrentView('dashboard')}>
                   <div className="bg-red-600 p-1 rounded">
-                     {/* Letra K preta/escura */}
                      <span className="text-[#333] font-bold text-xl px-1">K</span>
                   </div>
                   <div className="leading-tight">
-                    {/* Título Kasil preto/escuro */}
                     <h1 className="font-bold text-lg text-[#333]">Kasil</h1>
-                    <p className="text-[10px] text-blue-200 -mt-1 uppercase tracking-widest">Intranet</p>
+                    <p className="text-[10px] text-gray-400 -mt-1 uppercase tracking-widest">Intranet</p>
                   </div>
                 </div>
-
                 <div className="flex-1 max-w-2xl px-10">
                   <div className="relative group">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#0056b3] transition-colors">
-                        <Search className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Pesquise pelo site"
-                      className="w-full bg-white rounded py-1.5 pl-10 pr-4 text-sm border-none focus:ring-2 focus:ring-white/50 focus:bg-white transition-all outline-none text-gray-700"
-                    />
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#0056b3] transition-colors"><Search className="w-4 h-4" /></div>
+                    <input type="text" placeholder="Pesquise pelo site" className="w-full bg-white rounded py-1.5 pl-10 pr-4 text-sm border-none focus:ring-2 focus:ring-[#0056b3]/50 focus:bg-white transition-all outline-none text-gray-700 shadow-inner bg-gray-100" />
                   </div>
                 </div>
-
-                <div className="flex items-center gap-4 text-sm text-white">
+                <div className="flex items-center gap-4 text-sm text-gray-600">
                   <span className="font-semibold text-xs tracking-tight">PEDRO HENRIQUE DA SILVA ROCHA</span>
-                  {/* Perfil */}
-                  <div className="w-8 h-8 rounded-full bg-white text-[#0056b3] flex items-center justify-center font-bold shadow-sm">P</div>
+                  <div className="w-8 h-8 rounded-full bg-[#0056b3] text-white flex items-center justify-center font-bold shadow-sm">P</div>
                 </div>
               </header>
 
-              {/* NAV: Azul Escuro, Linha Vermelha no TOPO (border-t-2), sem setas */}
+              {/* NAV */}
               <nav className="bg-[#003366] border-t-2 border-[#e31e24] text-white py-2 flex justify-center gap-8 text-sm shadow-md sticky top-14 z-40">
                 {['Agenda', 'SCK', 'Normas', 'Serviços', 'Colaboradores', 'Antena Interna'].map((item) => (
                     <a key={item} href="#" className="hover:text-blue-200 font-medium transition-colors">{item}</a>
@@ -292,198 +318,79 @@
 
               <div className="p-6 max-w-[1400px] mx-auto space-y-6 relative">
                 
-                {/* PAINEL DE ÍNDICES */}
+                {/* PAINEL DE ÍNDICES (SEMPRE VISÍVEL) */}
                 <div className="bg-white rounded-lg shadow-md border-t-4 border-[#0056b3] overflow-hidden mb-8 transition-shadow hover:shadow-lg">
-                    {/* CABEÇALHO DO PAINEL */}
                     <div className="px-4 py-2 bg-[#0056b3] border-b border-blue-800 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <BarChart2 className="w-5 h-5 text-white" />
-                        <h3 className="font-bold text-white text-sm uppercase tracking-wide">
-                          Painel Econômico <span className="text-xs font-normal text-blue-200 ml-2">| Cotações atualizadas</span>
-                        </h3>
+                        <h3 className="font-bold text-white text-sm uppercase tracking-wide">Painel Econômico <span className="text-xs font-normal text-blue-200 ml-2">| Cotações atualizadas</span></h3>
                       </div>
-                      
-                      <button 
-                        onClick={() => openModal(null)}
-                        className="text-[10px] font-bold text-white hover:text-blue-100 hover:bg-blue-800 px-3 py-1.5 rounded flex items-center gap-1 transition-all border border-transparent hover:border-blue-300"
-                      >
-                        VER TABELA COMPLETA <ExternalLink className="w-3 h-3" />
-                      </button>
+                      <button onClick={() => openModal(null)} className="text-[10px] font-bold text-white hover:text-blue-100 hover:bg-blue-800 px-3 py-1.5 rounded flex items-center gap-1 transition-all border border-transparent hover:border-blue-300">VER TABELA COMPLETA <ExternalLink className="w-3 h-3" /></button>
                     </div>
-
                     <div className="p-0 overflow-x-auto scrollbar-hide">
                       <div className="flex divide-x divide-gray-100">
                         {indices.map((item, idx) => (
-                          <div 
-                            key={idx} 
-                            onClick={() => openModal(item.nome)}
-                            className="flex-none w-[150px] p-4 hover:bg-blue-50 cursor-pointer transition-all group relative"
-                            title={`Clique para ver o histórico detalhado de ${item.nome}`}
-                          >
-                            {/* ÍCONE DE TENDÊNCIA */}
-                            <div className="absolute top-2 right-2">
-                                {item.status === 'up' ? (
-                                    <BoldArrowUp className="w-4 h-4 text-green-500" />
-                                ) : (
-                                    <BoldArrowDown className="w-4 h-4 text-red-500" />
-                                )}
-                            </div>
-
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-[11px] font-bold text-gray-600 group-hover:text-[#0056b3] transition-colors">
-                                {item.nome}
-                              </span>
-                            </div>
-                            
-                            <div className="flex items-baseline gap-2">
-                              <span className={`text-lg font-bold leading-none ${item.status === 'up' ? 'text-up' : 'text-down'}`}>
-                                {item.var}
-                              </span>
-                            </div>
-                            
-                            <div className="mt-2 flex justify-between items-end">
-                               <span className="text-[9px] text-gray-400 font-medium uppercase">{item.mes}</span>
-                               {item.valor && (
-                                 <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-1 rounded">R$ {item.valor}</span>
-                               )}
-                            </div>
+                          <div key={idx} onClick={() => openModal(item.nome)} className="flex-none w-[150px] p-4 hover:bg-blue-50 cursor-pointer transition-all group relative" title={`Clique para ver o histórico detalhado de ${item.nome}`}>
+                            <div className="absolute top-2 right-2">{item.status === 'up' ? <BoldArrowUp className="w-4 h-4 text-green-500" /> : <BoldArrowDown className="w-4 h-4 text-red-500" />}</div>
+                            <div className="flex items-center justify-between mb-2"><span className="text-[11px] font-bold text-gray-600 group-hover:text-[#0056b3] transition-colors">{item.nome}</span></div>
+                            <div className="flex items-baseline gap-2"><span className={`text-lg font-bold leading-none ${item.status === 'up' ? 'text-up' : 'text-down'}`}>{item.var}</span></div>
+                            <div className="mt-2 flex justify-between items-end"><span className="text-[9px] text-gray-400 font-medium uppercase">{item.mes}</span>{item.valor && <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-1 rounded">R$ {item.valor}</span>}</div>
                             <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#0056b3] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                           </div>
                         ))}
                       </div>
                     </div>
-                    
-                    <div className="bg-blue-50/30 px-4 py-1.5 border-t flex justify-between items-center">
-                       <p className="text-[10px] text-gray-500 flex items-center gap-1.5 font-medium">
-                        <Info className="w-3 h-3 text-[#0056b3]" />
-                        Clique em qualquer índice para ver seu histórico individual.
-                      </p>
-                    </div>
+                    <div className="bg-blue-50/30 px-4 py-1.5 border-t flex justify-between items-center"><p className="text-[10px] text-gray-500 flex items-center gap-1.5 font-medium"><Info className="w-3 h-3 text-[#0056b3]" />Clique em qualquer índice para ver seu histórico individual.</p></div>
                 </div>
 
-                {/* RESTANTE DO LAYOUT */}
-                <div className="grid grid-cols-12 gap-6">
-                  {/* Coluna Esquerda */}
-                  <div className="col-span-12 lg:col-span-4">
-                    <div className="bg-white rounded shadow-md relative overflow-hidden min-h-[300px]">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-4">
-                         <div className="bg-red-500 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center text-white shadow-sm">
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                         </div>
-                      </div>
-                      <div className="p-8 pt-10 text-center border-b border-gray-100">
-                        <h3 className="text-red-600 font-bold text-lg">Atividades Pendentes</h3>
-                      </div>
-                      <div className="p-4 text-sm space-y-4">
-                        <div className="flex gap-3 items-start hover:bg-gray-50 p-2 rounded transition-colors cursor-pointer">
-                          <div className="text-red-500 mt-1.5 text-xs">•</div>
-                          <div>
-                            <p className="font-semibold text-gray-800">Solicitações pendentes de conferência</p>
-                            <p className="text-xs text-[#0056b3] font-bold mt-0.5">PRAIA VERDE</p>
-                          </div>
+                {/* CONTEÚDO CONDICIONAL: DASHBOARD OU DETALHES */}
+                {currentView === 'indicators' ? (
+                    <DetailedIndicators onClose={() => setCurrentView('dashboard')} />
+                ) : (
+                    <div className="grid grid-cols-12 gap-6">
+                        {/* Coluna Esquerda */}
+                        <div className="col-span-12 lg:col-span-4">
+                            <div className="bg-white rounded shadow-md relative overflow-hidden min-h-[300px]">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-4"><div className="bg-red-500 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center text-white shadow-sm"><div className="w-2 h-2 bg-white rounded-full"></div></div></div>
+                                <div className="p-8 pt-10 text-center border-b border-gray-100"><h3 className="text-red-600 font-bold text-lg">Atividades Pendentes</h3></div>
+                                <div className="p-4 text-sm space-y-4">
+                                    <div className="flex gap-3 items-start hover:bg-gray-50 p-2 rounded transition-colors cursor-pointer"><div className="text-red-500 mt-1.5 text-xs">•</div><div><p className="font-semibold text-gray-800">Solicitações pendentes de conferência</p><p className="text-xs text-[#0056b3] font-bold mt-0.5">PRAIA VERDE</p></div></div>
+                                    <div className="flex gap-3 items-start hover:bg-gray-50 p-2 rounded transition-colors cursor-pointer"><div className="text-red-500 mt-1.5 text-xs">•</div><div><p className="font-semibold text-gray-800">Depósitos não identificados pendentes</p><p className="text-xs text-[#0056b3] font-bold mt-0.5">PRAIA VERDE</p></div></div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex gap-3 items-start hover:bg-gray-50 p-2 rounded transition-colors cursor-pointer">
-                          <div className="text-red-500 mt-1.5 text-xs">•</div>
-                          <div>
-                            <p className="font-semibold text-gray-800">Depósitos não identificados pendentes</p>
-                            <p className="text-xs text-[#0056b3] font-bold mt-0.5">PRAIA VERDE</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Coluna Meio */}
-                  <div className="col-span-12 lg:col-span-5 space-y-6">
-                    <div className="bg-[#fffbe6] rounded shadow-md p-4 border-l-4 border-red-500 flex items-start gap-3">
-                      <Bell className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-                      <div>
-                        <h3 className="text-red-700 font-bold text-sm uppercase mb-1">Comunicados</h3>
-                        <p className="text-xs text-red-800 leading-relaxed">• SCK: seu login e senha são pessoais e intransferíveis.</p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white rounded shadow-md p-4 transition-transform hover:-translate-y-1 duration-200">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="bg-blue-500 w-2 h-4 rounded-sm"></div>
-                          <h3 className="text-blue-500 font-bold text-sm">Antenado</h3>
+                        {/* Coluna Meio */}
+                        <div className="col-span-12 lg:col-span-5 space-y-6">
+                            <div className="bg-[#fffbe6] rounded shadow-md p-4 border-l-4 border-red-500 flex items-start gap-3"><Bell className="w-5 h-5 text-red-500 mt-0.5 shrink-0" /><div><h3 className="text-red-700 font-bold text-sm uppercase mb-1">Comunicados</h3><p className="text-xs text-red-800 leading-relaxed">• SCK: seu login e senha são pessoais e intransferíveis.</p></div></div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-white rounded shadow-md p-4 transition-transform hover:-translate-y-1 duration-200"><div className="flex items-center gap-2 mb-3"><div className="bg-blue-500 w-2 h-4 rounded-sm"></div><h3 className="text-blue-500 font-bold text-sm">Antenado</h3></div><div className="flex gap-2"><div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-[8px] text-gray-400 font-bold">IMG</div><div className="text-[10px]"><p className="text-blue-500 font-bold hover:underline cursor-pointer">Momentum 50 anos</p><p className="text-gray-500 leading-tight">Colaboradores curtem o presente...</p></div></div></div>
+                                <div className="bg-white rounded shadow-md p-4 transition-transform hover:-translate-y-1 duration-200"><div className="flex items-center gap-2 mb-3"><div className="bg-green-500 w-2 h-4 rounded-sm"></div><h3 className="text-green-500 font-bold text-sm">Mais Acessados</h3></div><ul className="text-[10px] space-y-1.5"><li className="text-green-600 hover:underline cursor-pointer font-medium">Momentum 50 anos</li><li className="text-green-600 hover:underline cursor-pointer font-medium">Novos Colaboradores</li></ul></div>
+                            </div>
                         </div>
-                        <div className="flex gap-2">
-                          <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-[8px] text-gray-400 font-bold">IMG</div>
-                          <div className="text-[10px]">
-                            <p className="text-blue-500 font-bold hover:underline cursor-pointer">Momentum 50 anos</p>
-                            <p className="text-gray-500 leading-tight">Colaboradores curtem o presente...</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="bg-white rounded shadow-md p-4 transition-transform hover:-translate-y-1 duration-200">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="bg-green-500 w-2 h-4 rounded-sm"></div>
-                          <h3 className="text-green-500 font-bold text-sm">Mais Acessados</h3>
-                        </div>
-                        <ul className="text-[10px] space-y-1.5">
-                          <li className="text-green-600 hover:underline cursor-pointer font-medium">Momentum 50 anos</li>
-                          <li className="text-green-600 hover:underline cursor-pointer font-medium">Novos Colaboradores</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Coluna Direita */}
-                  <div className="col-span-12 lg:col-span-3 space-y-4">
-                    <div className="bg-white rounded shadow-md overflow-hidden group">
-                       <div className="bg-red-600 p-2.5 text-white flex justify-between items-center text-xs font-bold uppercase tracking-wider group-hover:bg-red-700 transition-colors cursor-pointer">
-                         Agenda
-                         <ChevronRight className="w-4 h-4" />
-                       </div>
-                       <div className="p-4 flex gap-4 items-center">
-                         <div className="text-center shrink-0">
-                            <Calendar className="w-8 h-8 text-red-600 mx-auto" />
-                            <span className="text-xl font-bold block text-gray-800">29</span>
-                            <span className="text-[8px] uppercase font-bold text-gray-400">Jan</span>
-                         </div>
-                         <div className="text-[10px] border-l pl-3">
-                           <p className="text-gray-400 uppercase font-bold mb-1">Águas de Santa Bárbara</p>
-                           <p className="text-gray-500 italic">Não há agendamentos.</p>
-                         </div>
-                       </div>
+                        {/* Coluna Direita */}
+                        <div className="col-span-12 lg:col-span-3 space-y-4">
+                            <div className="bg-white rounded shadow-md overflow-hidden group">
+                                <div className="bg-red-600 p-2.5 text-white flex justify-between items-center text-xs font-bold uppercase tracking-wider group-hover:bg-red-700 transition-colors cursor-pointer">Agenda <ChevronRight className="w-4 h-4" /></div>
+                                <div className="p-4 flex gap-4 items-center"><div className="text-center shrink-0"><Calendar className="w-8 h-8 text-red-600 mx-auto" /><span className="text-xl font-bold block text-gray-800">29</span><span className="text-[8px] uppercase font-bold text-gray-400">Jan</span></div><div className="text-[10px] border-l pl-3"><p className="text-gray-400 uppercase font-bold mb-1">Águas de Santa Bárbara</p><p className="text-gray-500 italic">Não há agendamentos.</p></div></div>
+                            </div>
+                            
+                            {/* WIDGET LATERAL MODIFICADO: DÓLAR COM LINK PARA DETALHES */}
+                            <div className="bg-white rounded shadow-md overflow-hidden opacity-90 hover:opacity-100 transition-opacity">
+                                <div className="bg-gray-100 p-2.5 text-gray-500 text-xs font-bold uppercase flex justify-between border-b">Dólar Comercial</div>
+                                <div className="p-3 text-xs space-y-2">
+                                    <div className="flex justify-between items-center"><span className="text-gray-500">Valor de Venda:</span><span className="font-bold text-gray-700 text-sm">R$ 3,0267</span></div>
+                                    <button onClick={() => setCurrentView('indicators')} className="w-full text-center text-[10px] font-bold text-[#0056b3] uppercase hover:underline mt-2">Ver todos indicadores</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div className="bg-white rounded shadow-md overflow-hidden opacity-90 hover:opacity-100 transition-opacity">
-                       <div className="bg-gray-100 p-2.5 text-gray-500 text-xs font-bold uppercase flex justify-between border-b">
-                         Dólar Comercial
-                       </div>
-                       <div className="p-3 text-xs">
-                         <div className="flex justify-between items-center">
-                           <span className="text-gray-500">Valor de Venda:</span>
-                           <span className="font-bold text-gray-700 text-sm">R$ 5,0267</span>
-                         </div>
-                       </div>
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 <footer className="mt-12 space-y-8 pb-10">
-                  <div className="flex justify-center items-center gap-6 text-[10px] text-gray-400 font-bold uppercase border-t pt-8">
-                    <a href="#" className="hover:text-[#0056b3] transition-colors">Fale Conosco</a>
-                    <span className="text-gray-300">|</span>
-                    <a href="#" className="hover:text-[#0056b3] transition-colors">Mapa do Site</a>
-                    <span className="text-gray-300">|</span>
-                    <a href="#" className="hover:text-[#0056b3] transition-colors">Política de Privacidade</a>
-                  </div>
-
-                  <div className="flex justify-center items-center gap-12 opacity-80 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div className="text-xl font-bold italic text-blue-800">momentum</div>
-                    <div className="text-2xl font-bold text-blue-900 flex items-baseline">slim<span className="text-[10px] font-normal not-italic ml-0.5">®</span></div>
-                    <div className="text-xl font-bold text-green-700 flex items-center gap-1">
-                       <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center shadow-sm">
-                         <div className="w-2 h-4 border-2 border-white border-t-0 border-l-0 rotate-45 mb-1"></div>
-                       </div>
-                       IRM
-                    </div>
-                    <div className="text-xl font-bold text-blue-600">REΛLIZΛ</div>
-                  </div>
+                  <div className="flex justify-center items-center gap-6 text-[10px] text-gray-400 font-bold uppercase border-t pt-8"><a href="#" className="hover:text-[#0056b3] transition-colors">Fale Conosco</a><span className="text-gray-300">|</span><a href="#" className="hover:text-[#0056b3] transition-colors">Mapa do Site</a><span className="text-gray-300">|</span><a href="#" className="hover:text-[#0056b3] transition-colors">Política de Privacidade</a></div>
+                  <div className="flex justify-center items-center gap-12 opacity-80 grayscale hover:grayscale-0 transition-all duration-500"><div className="text-xl font-bold italic text-blue-800">momentum</div><div className="text-2xl font-bold text-blue-900 flex items-baseline">slim<span className="text-[10px] font-normal not-italic ml-0.5">®</span></div><div className="text-xl font-bold text-green-700 flex items-center gap-1"><div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center shadow-sm"><div className="w-2 h-4 border-2 border-white border-t-0 border-l-0 rotate-45 mb-1"></div></div>IRM</div><div className="text-xl font-bold text-blue-600">REΛLIZΛ</div></div>
                 </footer>
               </div>
             </div>
