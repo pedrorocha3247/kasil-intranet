@@ -11,34 +11,43 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* --- ESTILOS DA TABELA REFORMULADA --- */
-        /* Header Principal (Nome do Índice) */
+        /* --- ESTILOS DA TABELA (Baseado no seu código de exemplo) --- */
+        
+        /* Header Principal (Fundo Cinza, Fonte Pesada) */
         .th-main { 
-            @apply px-4 py-3 text-center align-middle text-xs font-extrabold text-[#0056b3] uppercase tracking-wider bg-gray-100 border-b border-r border-gray-300; 
+            @apply px-4 py-4 text-center align-middle text-[11px] font-black text-gray-600 uppercase tracking-[0.15em] bg-[#e9ecef] border-b border-r border-gray-300; 
         }
         
-        /* Sub-Header Minimalista (% ou R$) */
+        /* Sub-Header (Fundo um pouco mais claro) */
         .th-sub { 
-            @apply px-2 py-1 text-center align-middle text-[10px] font-bold text-gray-500 bg-gray-50 border-b border-r border-gray-200 h-8; 
+            @apply px-2 py-2 text-center align-middle text-[10px] font-bold text-gray-500 uppercase tracking-wider bg-[#f8f9fa] border-b border-r border-gray-200 h-8; 
         }
 
         /* Célula de Dados */
         .td-cell { 
-            @apply px-4 py-3 whitespace-nowrap text-sm border-b border-r border-gray-100 text-center align-middle transition-colors font-medium text-gray-700; 
+            @apply px-4 py-3 whitespace-nowrap text-xs font-bold border-b border-r border-gray-200 text-center align-middle transition-colors text-gray-700; 
         }
         
         /* Coluna Sticky (Mês) */
         .sticky-col {
-            @apply sticky left-0 z-10 bg-gray-50 border-r border-gray-300 font-bold text-gray-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)];
+            @apply sticky left-0 z-10 bg-[#e9ecef] border-r border-gray-300 font-black text-gray-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)];
+        }
+        
+        /* Sticky para o corpo da tabela (fundo branco para não misturar) */
+        .sticky-col-body {
+            @apply sticky left-0 z-10 bg-white border-r border-gray-200 font-black text-gray-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)];
         }
 
         /* Cores utilitárias */
-        .text-up { @apply text-green-600 font-bold; }
-        .text-down { @apply text-red-600 font-bold; }
-        .text-neutral { @apply text-gray-400 font-normal; }
+        .text-up { @apply text-green-600 font-black; }
+        .text-down { @apply text-red-600 font-black; }
+        .text-neutral { @apply text-gray-400 font-medium; }
         
         .animate-scale-in { animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -115,25 +124,25 @@
 
             return (
                 <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-scale-in">
-                    <div className={`bg-white rounded-lg shadow-2xl w-full flex flex-col overflow-hidden transition-all duration-300 ${singleIndex ? 'max-w-2xl' : 'max-w-[95vw]'}`}>
+                    <div className={`bg-white rounded-lg shadow-2xl w-full flex flex-col overflow-hidden transition-all duration-300 ${singleIndex ? 'max-w-3xl' : 'max-w-[95vw]'}`}>
                         
                         {/* Header */}
-                        <div className="flex items-center justify-between p-4 border-b bg-gray-50 shrink-0">
+                        <div className="flex items-center justify-between p-4 border-b bg-[#f8f9fa] shrink-0">
                             <div className="flex items-center gap-4">
-                                <div className="bg-[#0056b3] p-2 rounded-md shadow-sm">
-                                    <BarChart2 className="w-5 h-5 text-white" />
+                                <div className="bg-gray-200 p-2 rounded-md shadow-sm">
+                                    <BarChart2 className="w-5 h-5 text-gray-600" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-bold text-gray-800 tracking-tight">
+                                    <h2 className="text-xl font-black text-[#0056b3] uppercase tracking-widest">
                                         {config.filterIndex ? `${config.filterIndex}` : 'Histórico de Índices'}
                                     </h2>
-                                    <p className="text-xs text-gray-500 font-medium">Base de dados oficial</p>
+                                    <p className="text-xs text-gray-500 font-bold uppercase tracking-wide">Base de dados oficial</p>
                                 </div>
                             </div>
                             
                             <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded border border-gray-200 shadow-sm">
-                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">Ano:</span>
+                                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded border border-gray-300 shadow-sm">
+                                    <span className="text-xs font-black text-gray-500 uppercase tracking-wide">Ano:</span>
                                     <select 
                                         value={selectedYear} 
                                         onChange={(e) => setSelectedYear(e.target.value)}
@@ -164,12 +173,12 @@
                                             )}
                                         </tr>
                                     ) : (
-                                        // HEADER COMPLETO REFORMULADO (Merged Rows)
+                                        // HEADER COMPLETO (Com a formatação solicitada)
                                         <>
                                             <tr>
                                                 <th rowSpan="2" className="th-main sticky-col border-b-2 border-gray-300">MÊS</th>
-                                                <th colSpan="2" className="th-main text-blue-800">IGP-M</th>
-                                                <th colSpan="2" className="th-main text-green-800">OTN-MEI</th>
+                                                <th colSpan="2" className="th-main">IGP-M</th>
+                                                <th colSpan="2" className="th-main">OTN-MEI</th>
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300">IPCA</th>
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300">IPC-DI</th>
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300">IPC-R</th>
@@ -179,7 +188,7 @@
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300 border-r-0">IPC-FIPE</th>
                                             </tr>
                                             <tr>
-                                                {/* Sub-header apenas para colunas duplas */}
+                                                {/* Sub-header */}
                                                 <th className="th-sub border-b-2 border-gray-300 text-blue-600">%</th>
                                                 <th className="th-sub border-b-2 border-gray-300 text-blue-600">R$</th>
                                                 <th className="th-sub border-b-2 border-gray-300 text-green-600">%</th>
@@ -192,8 +201,8 @@
                                 <tbody className="bg-white">
                                     {dados.length > 0 ? (
                                         dados.map((row, idx) => (
-                                            <tr key={idx} className="hover:bg-blue-50 transition-colors group">
-                                                <td className="sticky-col td-cell text-gray-900 group-hover:bg-blue-100">
+                                            <tr key={idx} className="hover:bg-blue-50/50 transition-colors group">
+                                                <td className="sticky-col-body td-cell text-gray-900 group-hover:bg-blue-50/50">
                                                     {row.mes}
                                                 </td>
 
@@ -203,18 +212,18 @@
                                                             {row[singleIndex.varKey]}
                                                         </td>
                                                         {singleIndex.hasValue && (
-                                                            <td className="td-cell font-bold text-gray-600 text-lg">
+                                                            <td className="td-cell font-black text-gray-600 text-lg">
                                                                 {singleIndex.valKey === 'otn_val' ? 'R$ ' : ''}{row[singleIndex.valKey]}
                                                             </td>
                                                         )}
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <td className={`td-cell bg-blue-50/20 ${getTrendColor(row.igpm_var)}`}>{row.igpm_var}</td>
-                                                        <td className="td-cell text-gray-500 bg-blue-50/20">{row.igpm_val}</td>
+                                                        <td className={`td-cell bg-blue-50/10 ${getTrendColor(row.igpm_var)}`}>{row.igpm_var}</td>
+                                                        <td className="td-cell text-gray-500 bg-blue-50/10">{row.igpm_val}</td>
                                                         
-                                                        <td className={`td-cell bg-green-50/20 ${getTrendColor(row.otn_var)}`}>{row.otn_var}</td>
-                                                        <td className="td-cell font-bold text-green-700 bg-green-50/20">R$ {row.otn_val}</td>
+                                                        <td className={`td-cell bg-green-50/10 ${getTrendColor(row.otn_var)}`}>{row.otn_var}</td>
+                                                        <td className="td-cell font-black text-green-700 bg-green-50/10">R$ {row.otn_val}</td>
                                                         
                                                         <td className={`td-cell ${getTrendColor(row.ipca)}`}>{row.ipca}</td>
                                                         <td className={`td-cell ${getTrendColor(row.ipcdi)}`}>{row.ipcdi}</td>
@@ -229,7 +238,7 @@
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="12" className="p-10 text-center text-gray-400 italic">
+                                            <td colSpan="12" className="p-10 text-center text-gray-400 italic font-medium">
                                                 Nenhum dado registrado para {selectedYear}.
                                             </td>
                                         </tr>
@@ -242,7 +251,7 @@
                         <div className="p-4 border-t bg-gray-50 flex justify-end shrink-0">
                             <button 
                                 onClick={onClose}
-                                className="px-6 py-2 bg-[#0056b3] text-white text-sm font-bold rounded shadow-md hover:bg-blue-800 hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                                className="px-6 py-2 bg-[#0056b3] text-white text-xs font-black uppercase tracking-widest rounded shadow hover:bg-blue-800 transition-colors"
                             >
                                 Fechar Tabela
                             </button>
