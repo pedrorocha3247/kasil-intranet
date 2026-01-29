@@ -1,381 +1,270 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasil Intranet - Dashboard</title>
-    <!-- Tailwind CSS Play CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel para JSX no navegador -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f0f0f0; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
-
-    <script type="text/babel">
-        // Extração segura dos ícones
-        const { 
-            Search, Calendar, Bell, ChevronRight, TrendingUp, 
-            ExternalLink, ArrowLeft, Download, Filter, Home, 
-            ChevronLeft, ArrowUpRight, ArrowDownRight, Info, X
-        } = lucide;
-
-        function App() {
-            const [view, setView] = React.useState('dashboard');
-
-            // --- DADOS DO SISTEMA ---
-            const indicesResumo = [
-                { nome: 'IGP-M', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', status: 'up' },
-                { nome: 'OTN-MEI', mes: 'Jan/26', var: '0,41%', valor: '128,44', status: 'up' },
-                { nome: 'IPCA (IBGE)', mes: 'Nov/25', var: '0,18%', status: 'up' },
-                { nome: 'IPC-DI', mes: 'Dez/25', var: '0,28%', status: 'up' },
-                { nome: 'IGP-DI', mes: 'Dez/25', var: '0,10%', status: 'up' },
-                { nome: 'IPC-R', mes: 'Dez/25', var: '-0,01%', status: 'down' },
-            ];
-
-            const dadosIndicadores = {
-                principais: [
-                    { titulo: 'VALOR US', valor: 'R$ 3,0267', sub: 'Janeiro/2026' },
-                    { titulo: 'SALÁRIO MÍNIMO', valor: 'R$ 1.621,00', sub: 'Vigente' },
-                ],
-                titulosSlim: {
-                    valorBase: 'R$ 50.000,00',
-                    multiplicadores: ['1x', '12x', '18x', '24x', '36x']
-                },
-                slimPrecos: [
-                    { desc: 'COM CONSTRUÇÃO', valor: 'R$ 309,00' },
-                    { desc: 'SOMENTE LOTE', valor: 'R$ 103,00' },
-                    { desc: 'EMPREENDIMENTO 97', valor: 'R$ 309,00' },
-                ]
-            };
-
-            const taxasConservacao = [
-                { nome: 'NVIER', valor: '434,11' },
-                { nome: 'NVIIER', valor: '434,11' },
-                { nome: 'RSC I', valor: '434,11' },
-                { nome: 'RSC II', valor: '434,11' },
-            ];
-
-            const melhoramentos = [
-                { nome: 'NVIER', valor: '802,88' },
-                { nome: 'NVIIER', valor: '896,00' },
-                { nome: 'RSC I', valor: '973,70' },
-                { nome: 'RSC II', valor: '934,05' },
-            ];
-
-            // Helper para renderizar ícones React com Lucide via CDN
-            const Icon = ({ name, ...props }) => {
-                const LucideIcon = lucide[name];
-                return LucideIcon ? <LucideIcon {...props} /> : null;
-            };
-
-            return (
-                <div className="min-h-screen flex flex-col">
-                    {/* Header Principal */}
-                    <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
-                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('dashboard')}>
-                            <div className="bg-[#e31e24] p-1 rounded">
-                                <span className="text-white font-bold text-xl px-1">K</span>
-                            </div>
-                            <div className="leading-tight">
-                                <h1 className="font-bold text-lg text-[#333]">Kasil</h1>
-                                <p className="text-[10px] text-gray-400 -mt-1 uppercase tracking-widest font-bold">Intranet</p>
-                            </div>
-                        </div>
-                        
-                        <div className="flex-1 max-w-xl px-10 hidden md:block">
-                            <div className="relative">
-                                <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                                <input 
-                                    type="text" 
-                                    placeholder="Pesquise pelo site" 
-                                    className="w-full bg-[#f4f4f4] rounded py-1.5 pl-10 pr-4 text-sm border-none focus:ring-1 focus:ring-red-500"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 text-xs font-bold text-gray-700">
-                            <span className="hidden lg:block uppercase tracking-tight">Pedro Henrique da Silva Rocha</span>
-                            <div className="w-8 h-8 rounded-full bg-[#0056b3] text-white flex items-center justify-center font-bold">P</div>
-                        </div>
-                    </header>
-
-                    {/* Menu de Navegação */}
-                    <nav className="bg-[#a0a0a0] text-white py-2 flex justify-center gap-8 text-[11px] font-bold uppercase tracking-wider shadow-inner">
-                        {['Agenda', 'SCK', 'Normas', 'Serviços', 'Colaboradores', 'Antena Interna'].map(item => (
-                            <a key={item} href="#" className="hover:text-red-200 transition-colors">{item}</a>
-                        ))}
-                    </nav>
-
-                    <main className="p-6 flex-1 max-w-[1400px] mx-auto w-full">
-                        
-                        {view === 'dashboard' && (
-                            <div className="fade-in space-y-8">
-                                <div className="grid grid-cols-12 gap-6">
-                                    {/* Atividades Pendentes */}
-                                    <div className="col-span-12 lg:col-span-4 bg-white rounded shadow-md h-full min-h-[420px] flex flex-col items-center p-6 border-t-4 border-[#e31e24] relative">
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3">
-                                            <div className="bg-[#e31e24] w-14 h-6 rounded-t-lg shadow-sm"></div>
-                                        </div>
-                                        <h3 className="text-[#e31e24] font-bold text-lg mb-6 mt-4 uppercase tracking-tighter text-center">Atividades Pendentes</h3>
-                                        <div className="w-full space-y-5 text-[11px] text-gray-600 leading-relaxed overflow-y-auto pr-2 h-full scrollbar-hide">
-                                            <div className="flex gap-3">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 shrink-0"></div>
-                                                <p>Solicitações pendentes de conferência<br/><span className="text-blue-500 font-bold uppercase">Praia Verde</span></p>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 shrink-0"></div>
-                                                <p>Depósitos não identificados pendentes de envio para resultado<br/><span className="text-blue-500 font-bold uppercase">Praia Verde</span></p>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 shrink-0"></div>
-                                                <p>Conciliação da conta 1100998 - QUITAÇÃO DE LOTES CCB referente ao dia 31/12/2025 foi reprovada por RENATO BIANCHINI por falta de saldo zerado.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Comunicados */}
-                                    <div className="col-span-12 lg:col-span-5 space-y-6">
-                                        <div className="bg-[#fffbe6] rounded p-4 border-l-4 border-[#e31e24] shadow-sm">
-                                            <h3 className="text-red-700 font-bold text-xs uppercase flex items-center gap-2 tracking-widest"><Icon name="Bell" size={14}/> Comunicados</h3>
-                                            <p className="text-[11px] text-red-800 mt-2 font-medium">• SCK: seu login e senha são pessoais e intransferíveis.</p>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-white rounded p-4 border-t-4 border-blue-400 shadow-sm flex items-center justify-between group cursor-pointer">
-                                                <h4 className="text-blue-400 font-bold text-[10px] uppercase tracking-widest">Antenado</h4>
-                                                <Icon name="ChevronRight" size={14} className="text-blue-200 group-hover:text-blue-400" />
-                                            </div>
-                                            <div className="bg-white rounded p-4 border-t-4 border-green-500 shadow-sm flex items-center justify-between group cursor-pointer">
-                                                <h4 className="text-green-500 font-bold text-[10px] uppercase tracking-widest">Mais Acessados</h4>
-                                                <Icon name="ChevronRight" size={14} className="text-green-200 group-hover:text-green-400" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Agenda e Indicadores Rápidos */}
-                                    <div className="col-span-12 lg:col-span-3 space-y-4">
-                                        <div className="bg-[#e31e24] rounded-sm shadow-md overflow-hidden text-white">
-                                            <div className="px-2 py-1 text-[9px] font-bold uppercase flex justify-between border-b border-white/20">Agenda <Icon name="ChevronRight" size={12}/></div>
-                                            <div className="p-3 flex items-center gap-4">
-                                                <div className="bg-white text-[#e31e24] rounded p-1 text-center min-w-[55px]">
-                                                    <Icon name="Calendar" size={20} className="mx-auto" />
-                                                    <span className="text-xl font-black block leading-none">29</span>
-                                                    <span className="text-[7px] uppercase font-bold">Janeiro</span>
-                                                </div>
-                                                <div className="text-[10px] font-bold leading-tight">
-                                                    ÁGUAS DE SANTA BÁRBARA<br/>
-                                                    <span className="font-normal opacity-80 uppercase block mt-1">Não há agendamentos nesta data.</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div onClick={() => setView('indicators')} className="bg-[#e0e0e0] rounded-sm shadow-md overflow-hidden cursor-pointer group hover:bg-white transition-all border border-gray-300">
-                                            <div className="px-2 py-1 text-[9px] font-bold uppercase text-gray-500 flex justify-between border-b border-gray-300">Indicadores de Janeiro <Icon name="ChevronRight" size={12}/></div>
-                                            <div className="p-3 space-y-2 text-[11px] bg-white/50">
-                                                <div className="flex justify-between"><span>Valor US:</span><span className="font-bold">R$ 3,0267</span></div>
-                                                <div className="pt-2 border-t border-gray-300 flex flex-col">
-                                                    <span className="font-bold text-[10px] uppercase text-gray-400">Cotação OTNMEI</span>
-                                                    <div className="flex justify-between mt-1"><span>Atual:</span><span className="font-bold">R$ 127,92</span></div>
-                                                </div>
-                                                <button className="w-full text-center text-[9px] font-black uppercase text-gray-400 mt-2 py-1 bg-gray-50 border border-gray-200 rounded-sm">Ver todos</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* PAINEL DE ÍNDICES ECONÓMICOS */}
-                                <div className="bg-white rounded shadow-md border-t-4 border-[#0056b3] overflow-hidden">
-                                    <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <Icon name="TrendingUp" size={18} className="text-[#0056b3]" />
-                                            <h3 className="font-bold text-[#0056b3] text-xs uppercase tracking-widest">Índices Econômicos</h3>
-                                        </div>
-                                        <button onClick={() => setView('history')} className="text-[10px] text-gray-400 hover:text-[#0056b3] flex items-center gap-1 font-black uppercase tracking-wider transition-colors">
-                                            Histórico Completo <Icon name="ExternalLink" size={12} />
-                                        </button>
-                                    </div>
-                                    <div className="overflow-x-auto scrollbar-hide">
-                                        <div className="flex min-w-full">
-                                            {indicesResumo.map((item, idx) => (
-                                                <div key={idx} className="flex-1 min-w-[170px] p-4 border-r last:border-r-0 hover:bg-blue-50 transition-colors cursor-default">
-                                                    <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">{item.nome}</div>
-                                                    <div className="flex items-center gap-3">
-                                                        <span className={`text-xl font-black ${item.status === 'up' ? 'text-green-600' : 'text-red-600'}`}>{item.var}</span>
-                                                        <div className="flex flex-col">
-                                                            <span className="text-[8px] text-gray-400 font-bold uppercase leading-none mb-1">{item.mes}</span>
-                                                            {item.acumulado && <span className="text-[9px] font-black text-gray-700 leading-none">{item.acumulado}</span>}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {view === 'indicators' && (
-                            <div className="fade-in max-w-6xl mx-auto bg-white rounded shadow-xl border overflow-hidden">
-                                <div className="p-3 border-b bg-gray-50 flex items-center justify-between">
-                                    <h2 className="text-sm font-black text-gray-600 uppercase tracking-widest">Indicadores</h2>
-                                    <button onClick={() => setView('dashboard')} className="p-1 hover:bg-gray-200 rounded text-gray-400"><Icon name="X" size={20} /></button>
-                                </div>
-
-                                <div className="p-8 grid grid-cols-12 gap-y-10 gap-x-8">
-                                    {/* Bloco Superior: Valor US e Títulos Slim */}
-                                    <div className="col-span-12 md:col-span-3">
-                                        <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Valor US</p>
-                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.principais[0].valor}</p>
-                                    </div>
-                                    <div className="col-span-12 md:col-span-6">
-                                        <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Títulos Slim</p>
-                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.titulosSlim.valorBase}</p>
-                                        <div className="flex flex-wrap gap-2 mt-4">
-                                            {dadosIndicadores.titulosSlim.multiplicadores.map(m => (
-                                                <button key={m} className={`px-4 py-1 text-[11px] font-black rounded-full border ${m === '1x' ? 'bg-[#0056b3] border-[#0056b3] text-white' : 'border-gray-200 text-gray-400 hover:border-gray-300'}`}>{m}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="col-span-12 md:col-span-3 border-l md:pl-8 row-span-2">
-                                        <p className="text-xl font-light text-gray-400 uppercase tracking-widest mb-6">Slim</p>
-                                        <div className="space-y-6">
-                                            {dadosIndicadores.slimPrecos.map((item, i) => (
-                                                <div key={i}>
-                                                    <p className="text-xl font-black text-gray-800">{item.valor}</p>
-                                                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{item.desc}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Bloco Médio: Salário Mínimo e Selector NVIIER */}
-                                    <div className="col-span-12 md:col-span-3 border-t pt-8">
-                                        <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Salário mínimo</p>
-                                        <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.principais[1].valor}</p>
-                                    </div>
-                                    <div className="col-span-12 md:col-span-6 border-t pt-8">
-                                        <div className="flex items-center justify-center gap-8 mb-6">
-                                            <Icon name="ChevronLeft" size={24} className="text-gray-300 cursor-pointer hover:text-gray-500" />
-                                            <span className="text-2xl font-black text-gray-800 uppercase tracking-[0.2em]">NVIIER</span>
-                                            <Icon name="ChevronRight" size={24} className="text-gray-300 cursor-pointer hover:text-gray-500" />
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-6">
-                                            <div className="text-center">
-                                                <p className="text-lg font-light text-gray-400 uppercase">TALA</p>
-                                                <p className="text-base font-black text-gray-700">R$ 808,27</p>
-                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase tracking-tighter">MAR/2019 <Icon name="ChevronRight" size={10}/></div>
-                                            </div>
-                                            <div className="text-center">
-                                                <p className="text-lg font-light text-gray-400 uppercase">TAMA</p>
-                                                <p className="text-base font-black text-gray-700">5,07</p>
-                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase tracking-tighter">DEZ/2025 <Icon name="ChevronRight" size={10}/></div>
-                                            </div>
-                                            <div className="text-center">
-                                                <p className="text-lg font-light text-gray-400 uppercase">TSH</p>
-                                                <p className="text-base font-black text-gray-700">R$ 133,27</p>
-                                                <div className="mt-3 text-[10px] font-bold border py-1.5 px-2 rounded-sm bg-white flex justify-between items-center text-gray-500 cursor-pointer hover:bg-gray-50 uppercase tracking-tighter">MAR/2019 <Icon name="ChevronRight" size={10}/></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Tabelas Inferiores */}
-                                    <div className="col-span-12 md:col-span-3 border-t pt-8">
-                                        <p className="text-xl font-light text-gray-400 uppercase leading-none mb-2">Cotação<br/>OTNMEI</p>
-                                        <div className="flex justify-between items-center py-2 border-b"><span className="text-[11px] font-bold text-gray-400 uppercase">Valor atual:</span><span className="text-sm font-black text-black tracking-tight">R$ 127,92</span></div>
-                                        <table className="w-full mt-4 text-[11px]">
-                                            <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Data</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
-                                            <tbody className="text-gray-700 font-black"><tr className="border-b"><td className="py-2">DEZ/2025</td><td className="text-right">R$ 127,93</td></tr><tr className="border-b"><td className="py-2">NOV/2025</td><td className="text-right">R$ 127,59</td></tr></tbody>
-                                        </table>
-                                    </div>
-                                    <div className="col-span-12 md:col-span-4 border-t pt-8 md:px-4 border-l border-r">
-                                        <p className="text-xl font-light text-gray-400 uppercase tracking-tighter">Taxa de conservação</p>
-                                        <table className="w-full mt-5 text-[11px]">
-                                            <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Empreendimento</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
-                                            <tbody className="text-gray-800 font-black tracking-tight">
-                                                {taxasConservacao.map(t => (<tr key={t.nome} className="border-b hover:bg-gray-50 transition-colors"><td className="py-2">{t.nome}</td><td className="text-right font-black">{t.valor}</td></tr>))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div className="col-span-12 md:col-span-5 border-t pt-8">
-                                        <p className="text-xl font-light text-gray-400 uppercase tracking-tighter">Melhoramentos</p>
-                                        <table className="w-full mt-5 text-[11px]">
-                                            <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Empreendimento</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
-                                            <tbody className="text-gray-800 font-black tracking-tight">
-                                                {melhoramentos.map(t => (<tr key={t.nome} className="border-b hover:bg-gray-50 transition-colors"><td className="py-2">{t.nome}</td><td className="text-right font-black">{t.valor}</td></tr>))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {view === 'history' && (
-                            <div className="fade-in">
-                                <div className="bg-[#f8f9fa] border-b p-4 flex items-center justify-between mb-4 shadow-sm rounded-t-lg">
-                                    <button onClick={() => setView('dashboard')} className="flex items-center gap-2 text-[11px] font-black text-gray-400 hover:text-gray-700 uppercase tracking-widest transition-colors">
-                                        <Icon name="ArrowLeft" size={14} /> Voltar ao Dashboard
-                                    </button>
-                                    <h2 className="text-sm font-black text-[#0056b3] uppercase tracking-[0.2em]">Histórico de Índices</h2>
-                                    <div className="w-24"></div>
-                                </div>
-                                <div className="bg-white rounded-b-lg shadow-xl border overflow-hidden mx-auto max-w-5xl">
-                                    <table className="w-full text-center text-xs border-collapse">
-                                        <thead>
-                                            <tr className="bg-[#e9ecef] text-[11px] font-black text-gray-600 uppercase tracking-widest border-b">
-                                                <th className="p-5 border-r w-1/4">Referência</th>
-                                                <th className="p-5 border-r w-1/4">IGP-M (%)</th>
-                                                <th className="p-5 border-r w-1/4">OTN-MEI (R$)</th>
-                                                <th className="p-5 w-1/4">CUB/SINDUSCON (R$)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="font-bold text-gray-800">
-                                            <tr className="border-b transition-colors hover:bg-blue-50/50">
-                                                <td className="p-5 border-r uppercase font-black text-gray-700">Jan/2026</td>
-                                                <td className="p-5 border-r text-green-600 font-black text-base">0,41%</td>
-                                                <td className="p-5 border-r text-gray-600">128,44</td>
-                                                <td className="p-5 font-black text-gray-900">2.015,90</td>
-                                            </tr>
-                                            <tr className="border-b bg-gray-50/30 transition-colors hover:bg-blue-50/50">
-                                                <td className="p-5 border-r uppercase font-black text-gray-700">Dez/2025</td>
-                                                <td className="p-5 border-r text-red-600 font-black text-base">-0,01%</td>
-                                                <td className="p-5 border-r text-gray-600">127,93</td>
-                                                <td className="p-5 font-black text-gray-900">2.004,13</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div className="p-4 bg-gray-50 text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center border-t italic">
-                                        * Valores atualizados conforme publicação oficial dos órgãos reguladores.
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Logos das Empresas */}
-                        <footer className="mt-20 py-12 flex justify-center items-center gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-1000 border-t border-gray-200">
-                            <div className="text-xl font-black italic text-gray-500 uppercase tracking-tighter">momentum</div>
-                            <div className="text-2xl font-black text-gray-500 flex items-baseline tracking-tighter uppercase">slim<span className="text-[10px] font-normal not-italic ml-0.5">®</span></div>
-                            <div className="text-xl font-black text-gray-500 uppercase tracking-tighter">irm</div>
-                            <div className="text-xl font-black text-gray-500 uppercase tracking-tighter">realiza</div>
-                        </footer>
-                    </main>
+import React from 'react';
+import {
+  Search,
+  User,
+  Calendar,
+  Bell,
+  ChevronRight,
+  TrendingUp,
+  ArrowUpRight,
+  ArrowDownRight,
+  Info,
+  ExternalLink
+} from 'lucide-react';
+ 
+const App = () => {
+  // Dados simulados baseados na planilha (image_1a530b.png)
+  const indices = [
+    { nome: 'IGP-M', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', status: 'up' },
+    { nome: 'OTN-MEI', mes: 'Jan/26', var: '0,41%', valor: '128,44', status: 'up' },
+    { nome: 'IPCA (IBGE)', mes: 'Nov/25', var: '0,18%', status: 'up' },
+    { nome: 'IPC-DI', mes: 'Dez/25', var: '0,28%', status: 'up' },
+    { nome: 'IGP-DI', mes: 'Dez/25', var: '0,10%', status: 'up' },
+    { nome: 'IPC-R', mes: 'Dez/25', var: '-0,01%', status: 'down' },
+    { nome: 'CUB/SINDUSCON', mes: 'Dez/25', var: '0,31%', status: 'up' },
+    { nome: 'INPC', mes: 'Nov/25', var: '0,03%', status: 'up' },
+  ];
+ 
+  return (
+    <div className="min-h-screen bg-[#f0f0f0] font-sans text-gray-700">
+      {/* Header Superior */}
+      <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-50">
+        <div className="flex items-center gap-2">
+          <div className="bg-red-600 p-1 rounded">
+             <span className="text-white font-bold text-xl px-1">K</span>
+          </div>
+          <div className="leading-tight">
+            <h1 className="font-bold text-lg text-[#333]">Kasil</h1>
+            <p className="text-[10px] text-gray-400 -mt-1 uppercase tracking-widest">Intranet</p>
+          </div>
+        </div>
+ 
+        <div className="flex-1 max-w-2xl px-10">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Pesquise pelo site"
+              className="w-full bg-gray-100 rounded py-1.5 pl-10 pr-4 text-sm border-none focus:ring-1 focus:ring-red-500"
+            />
+          </div>
+        </div>
+ 
+        <div className="flex items-center gap-4 text-sm text-gray-600">
+          <span>PEDRO HENRIQUE DA SILVA ROCHA</span>
+          <div className="w-8 h-8 rounded-full bg-[#0056b3] text-white flex items-center justify-center font-bold">P</div>
+        </div>
+      </header>
+ 
+      {/* Menu Secundário */}
+      <nav className="bg-[#a0a0a0] text-white py-2 flex justify-center gap-8 text-sm shadow-inner">
+        {['Agenda', 'SCK', 'Normas', 'Serviços', 'Colaboradores', 'Antena Interna'].map(item => (
+          <a key={item} href="#" className="hover:text-red-200 transition-colors">{item}</a>
+        ))}
+      </nav>
+ 
+      {/* Background Geométrico Simulado */}
+      <div className="p-6 max-w-[1400px] mx-auto space-y-6 relative">
+       
+        {/* Layout de Grid Simulado (Baseado no primeiro print) */}
+        <div className="grid grid-cols-12 gap-6">
+         
+          {/* Coluna Esquerda - Atividades Pendentes */}
+          <div className="col-span-12 lg:col-span-4">
+            <div className="bg-white rounded shadow-md relative overflow-hidden min-h-[300px]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-4">
+                 <div className="bg-red-500 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center text-white">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                 </div>
+              </div>
+              <div className="p-8 pt-10 text-center border-b border-gray-100">
+                <h3 className="text-red-600 font-bold text-lg">Atividades Pendentes</h3>
+              </div>
+              <div className="p-4 text-sm space-y-4">
+                <div className="flex gap-2">
+                  <div className="text-red-500 mt-1">•</div>
+                  <div>
+                    <p className="font-semibold">Solicitações pendentes de conferência</p>
+                    <p className="text-xs text-blue-500">PRAIA VERDE</p>
+                  </div>
                 </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
+                <div className="flex gap-2">
+                  <div className="text-red-500 mt-1">•</div>
+                  <div>
+                    <p className="font-semibold">Depósitos não identificados pendentes de envio</p>
+                    <p className="text-xs text-blue-500">PRAIA VERDE</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+ 
+          {/* Coluna Meio - Comunicados / Antenado */}
+          <div className="col-span-12 lg:col-span-5 space-y-6">
+            <div className="bg-[#fffbe6] rounded shadow-md p-4 border-l-4 border-red-500">
+              <div className="flex items-center gap-2 mb-2">
+                <Bell className="w-4 h-4 text-red-500" />
+                <h3 className="text-red-700 font-bold text-sm uppercase">Comunicados</h3>
+              </div>
+              <p className="text-xs text-red-800">• SCK: seu login e senha são pessoais e intransferíveis.</p>
+            </div>
+ 
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded shadow-md p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-blue-500 w-2 h-4 rounded-sm"></div>
+                  <h3 className="text-blue-500 font-bold text-sm">Antenado</h3>
+                </div>
+                <div className="flex gap-2">
+                  <div className="w-10 h-10 bg-gray-100 flex items-center justify-center text-[8px] text-gray-400">IMG</div>
+                  <div className="text-[10px]">
+                    <p className="text-blue-500 font-bold">Momentum 50 anos</p>
+                    <p>Colaboradores curtem o presente...</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded shadow-md p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-green-500 w-2 h-4 rounded-sm"></div>
+                  <h3 className="text-green-500 font-bold text-sm">Mais Acessados</h3>
+                </div>
+                <ul className="text-[10px] space-y-1">
+                  <li className="text-green-600 underline">Momentum 50 anos</li>
+                  <li className="text-green-600 underline">Novos Colaboradores</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+ 
+          {/* Coluna Direita - Agenda / Indicadores */}
+          <div className="col-span-12 lg:col-span-3 space-y-4">
+            <div className="bg-white rounded shadow-md overflow-hidden">
+               <div className="bg-red-600 p-2 text-white flex justify-between items-center text-xs font-bold uppercase tracking-wider">
+                 Agenda
+                 <ChevronRight className="w-4 h-4" />
+               </div>
+               <div className="p-4 flex gap-4">
+                 <div className="text-center">
+                    <Calendar className="w-10 h-10 text-red-600" />
+                    <span className="text-2xl font-bold block -mt-2">29</span>
+                    <span className="text-[8px] uppercase font-bold text-gray-400">Janeiro</span>
+                 </div>
+                 <div className="text-[10px]">
+                   <p className="text-gray-400 uppercase font-bold">Águas de Santa Bárbara</p>
+                   <p className="text-gray-500 mt-1">Não há agendamentos nesta data.</p>
+                 </div>
+               </div>
+            </div>
+ 
+            <div className="bg-white rounded shadow-md overflow-hidden">
+               <div className="bg-gray-100 p-2 text-gray-500 text-xs font-bold uppercase flex justify-between">
+                 Indicadores de Janeiro
+                 <ChevronRight className="w-4 h-4 rotate-90" />
+               </div>
+               <div className="p-3 space-y-2 text-[11px]">
+                 <div className="flex justify-between">
+                   <span>Valor US:</span>
+                   <span className="font-bold">R$ 5,0267</span>
+                 </div>
+                 <div className="pt-1 border-t">
+                   <p className="font-bold text-gray-700">Cotação OTNMEI</p>
+                   <div className="flex justify-between mt-1">
+                     <span>Atual:</span>
+                     <span className="font-bold">R$ 127,92</span>
+                   </div>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </div>
+ 
+        {/* --- NOVO COMPONENTE PROPOSTO: PAINEL DE ÍNDICES --- */}
+        <div className="mt-8 transition-all hover:shadow-lg">
+          <div className="bg-white rounded-lg shadow-md border-t-4 border-[#0056b3] overflow-hidden">
+            <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-[#0056b3]" />
+                <h3 className="font-bold text-[#0056b3] text-sm uppercase tracking-wide">
+                  Índices Econômicos <span className="text-xs font-normal text-gray-400 ml-2">| Última Atualização: Jan/2026</span>
+                </h3>
+              </div>
+              <button className="text-[10px] text-gray-400 hover:text-[#0056b3] flex items-center gap-1 transition-colors">
+                VER HISTÓRICO COMPLETO <ExternalLink className="w-3 h-3" />
+              </button>
+            </div>
+ 
+            <div className="p-1 overflow-x-auto">
+              <div className="flex gap-0 min-w-full">
+                {indices.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex-1 min-w-[140px] p-3 border-r last:border-r-0 hover:bg-blue-50/30 transition-colors group cursor-default`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-bold text-gray-500 group-hover:text-[#0056b3]">{item.nome}</span>
+                      {item.status === 'up' ? (
+                        <ArrowUpRight className="w-3 h-3 text-green-500" />
+                      ) : (
+                        <ArrowDownRight className="w-3 h-3 text-red-500" />
+                      )}
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                      <span className={`text-lg font-bold ${item.status === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                        {item.var}
+                      </span>
+                      <span className="text-[9px] text-gray-400 font-medium">{item.mes}</span>
+                    </div>
+                    {item.acumulado && (
+                      <div className="mt-1 text-[9px] text-gray-400 flex justify-between">
+                        <span>Acumulado:</span>
+                        <span className="font-bold text-gray-600">{item.acumulado}</span>
+                      </div>
+                    )}
+                    {item.valor && (
+                      <div className="mt-1 text-[9px] text-gray-400 flex justify-between">
+                        <span>Valor:</span>
+                        <span className="font-bold text-gray-600">{item.valor}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+           
+            <div className="bg-blue-50/50 px-4 py-1.5 border-t">
+              <p className="text-[9px] text-gray-500 italic flex items-center gap-1">
+                <Info className="w-3 h-3" />
+                Dados consolidados conforme registros oficiais da planilha de índices. Proposta de automatização via banco de dados.
+              </p>
+            </div>
+          </div>
+        </div>
+ 
+        {/* Rodapé e Logos */}
+        <footer className="mt-12 space-y-8 pb-10">
+          <div className="flex justify-center items-center gap-6 text-[10px] text-gray-400 font-bold uppercase border-t pt-8">
+            <a href="#" className="hover:text-red-500">Fale Conosco</a>
+            <span>|</span>
+            <a href="#" className="hover:text-red-500">Mapa do Site</a>
+            <span>|</span>
+            <a href="#" className="hover:text-red-500">Política de Privacidade</a>
+          </div>
+ 
+          <div className="flex justify-center items-center gap-12 opacity-70">
+            <div className="text-xl font-bold italic text-blue-800">momentum</div>
+            <div className="text-2xl font-bold text-blue-900 flex items-baseline">slim<span className="text-[10px] font-normal not-italic ml-0.5">®</span></div>
+            <div className="text-xl font-bold text-green-700 flex items-center gap-1">
+               <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                 <div className="w-2 h-4 border-2 border-white border-t-0 border-l-0 rotate-45 mb-1"></div>
+               </div>
+               IRM
+            </div>
+            <div className="text-xl font-bold text-blue-600">REΛLIZΛ</div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+};
+ 
+export default App;
