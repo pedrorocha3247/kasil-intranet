@@ -14,36 +14,31 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* --- ESTILOS DA TABELA (AJUSTADOS PARA ALINHAMENTO) --- */
-        /* th-group: Títulos principais (IGP-M, IPCA...) */
-        .th-group { 
-            @apply px-2 py-3 text-center align-middle text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-100 border-b border-r border-gray-300; 
+        /* --- ESTILOS DA TABELA --- */
+        .th-header { 
+            @apply px-4 py-3 text-center align-middle text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-100 border-b border-r border-gray-300; 
         }
-        
-        /* th-sub: Sub-títulos (Var, Acumulado...) - Sem % nos títulos conforme solicitado */
         .th-sub { 
             @apply px-2 py-2 text-center align-middle text-[10px] font-bold uppercase bg-gray-50 border-b border-r border-gray-200; 
         }
-        
-        /* td-cell: Células de dados - Centralizadas */
         .td-cell { 
-            @apply px-3 py-3 whitespace-nowrap text-sm border-b border-r border-gray-100 text-center align-middle; 
+            @apply px-4 py-3 whitespace-nowrap text-sm border-b border-r border-gray-100 text-center align-middle transition-colors; 
         }
-
-        /* Cores utilitárias para números */
+        
+        /* Cores utilitárias */
         .text-up { @apply text-green-600 font-bold; }
         .text-down { @apply text-red-600 font-bold; }
-        .text-neutral { @apply text-gray-400; }
+        .text-neutral { @apply text-gray-400 font-medium; }
         
         .animate-fade-in { animation: fadeIn 0.2s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body class="bg-[#f0f0f0]">
     <div id="root"></div>
 
     <script type="text/babel">
-        // --- Ícones ---
+        // --- Ícones SVG ---
         const Search = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
         const Calendar = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>;
         const Bell = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>;
@@ -56,52 +51,62 @@
         const X = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>;
         const Filter = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
 
+        // --- Configuração de Mapeamento (De Nome do Índice para Chave no DB) ---
+        const indexConfig = {
+            'IGP-M': { varKey: 'igpm_var', valKey: 'igpm_val', hasValue: true, color: 'text-blue-800' },
+            'OTN-MEI': { varKey: 'otn_var', valKey: 'otn_val', hasValue: true, color: 'text-green-800' },
+            'IPCA': { varKey: 'ipca', hasValue: false },
+            'IPC-DI': { varKey: 'ipcdi', hasValue: false },
+            'IPC-R': { varKey: 'ipcr', hasValue: false },
+            'CUB': { varKey: 'cub', hasValue: false },
+            'IGP-DI': { varKey: 'igpdi', hasValue: false },
+            'INPC': { varKey: 'inpc', hasValue: false },
+            'IPC-FIPE': { varKey: 'ipcfipe', hasValue: false }
+        };
+
         // --- DADOS FICTÍCIOS POR ANO ---
         const dadosPorAno = {
             '2026': [
-                { mes: 'Jan', igpm_var: '0,41%', igpm_val: '1.207,73', otn_var: '0,41%', otn_val: '128,44', ipca: '0,25%', ipcdi: '0,28%', ipcr: '-', cub: '-', inpc: '-', ipcfipe: '0,38%' },
+                { mes: 'Jan', igpm_var: '0,41%', igpm_val: '1.207,73', otn_var: '0,41%', otn_val: '128,44', ipca: '0,25%', ipcdi: '0,28%', ipcr: '-', cub: '-', igpdi: '-', inpc: '-', ipcfipe: '0,38%' },
             ],
             '2025': [
-                { mes: 'Dez', igpm_var: '0,10%', igpm_val: '1.199,68', otn_var: '0,27%', otn_val: '127,93', ipca: '0,56%', ipcdi: '0,15%', ipcr: '-0,01%', cub: '0,31%', inpc: '0,40%', ipcfipe: '0,30%' },
-                { mes: 'Nov', igpm_var: '0,59%', igpm_val: '1.204,01', otn_var: '-0,36%', otn_val: '127,59', ipca: '0,28%', ipcdi: '0,33%', ipcr: '0,15%', cub: '0,25%', inpc: '0,10%', ipcfipe: '0,25%' },
-                { mes: 'Out', igpm_var: '0,50%', igpm_val: '1.198,97', otn_var: '0,42%', otn_val: '128,05', ipca: '0,24%', ipcdi: '0,40%', ipcr: '0,20%', cub: '0,30%', inpc: '0,22%', ipcfipe: '0,33%' },
-                { mes: 'Set', igpm_var: '0,37%', igpm_val: '1.194,67', otn_var: '0,36%', otn_val: '127,52', ipca: '0,26%', ipcdi: '0,35%', ipcr: '0,18%', cub: '0,22%', inpc: '0,25%', ipcfipe: '0,28%' },
-                { mes: 'Ago', igpm_var: '0,29%', igpm_val: '1.203,94', otn_var: '-0,77%', otn_val: '127,06', ipca: '0,23%', ipcdi: '0,20%', ipcr: '0,10%', cub: '0,28%', inpc: '0,20%', ipcfipe: '0,22%' },
-                { mes: 'Jul', igpm_var: '0,21%', igpm_val: '1.224,39', otn_var: '-1,67%', otn_val: '128,05', ipca: '0,12%', ipcdi: '0,15%', ipcr: '0,05%', cub: '0,20%', inpc: '0,15%', ipcfipe: '0,18%' },
-                { mes: 'Jun', igpm_var: '0,10%', igpm_val: '1.230,42', otn_var: '-0,49%', otn_val: '130,22', ipca: '0,08%', ipcdi: '0,05%', ipcr: '-0,05%', cub: '0,15%', inpc: '0,10%', ipcfipe: '0,10%' },
-                { mes: 'Mai', igpm_var: '-0,49%', igpm_val: '1.227,47', otn_var: '0,24%', otn_val: '130,86', ipca: '0,26%', ipcdi: '0,34%', ipcr: '-0,49%', cub: '0,60%', inpc: '0,35%', ipcfipe: '0,27%' },
-                { mes: 'Abr', igpm_var: '0,24%', igpm_val: '1.231,66', otn_var: '-0,34%', otn_val: '130,55', ipca: '0,43%', ipcdi: '0,52%', ipcr: '0,24%', cub: '0,27%', inpc: '0,48%', ipcfipe: '0,45%' },
-                { mes: 'Mar', igpm_var: '-0,34%', igpm_val: '1.218,74', otn_var: '1,06%', otn_val: '130,99', ipca: '0,56%', ipcdi: '0,44%', ipcr: '-0,34%', cub: '0,12%', inpc: '0,51%', ipcfipe: '0,62%' },
-                { mes: 'Fev', igpm_var: '1,06%', igpm_val: '1.215,46', otn_var: '0,27%', otn_val: '129,62', ipca: '1,31%', ipcdi: '1,18%', ipcr: '1,06%', cub: '1,88%', inpc: '1,48%', ipcfipe: '0,51%' },
-                { mes: 'Jan', igpm_var: '0,27%', igpm_val: '1.204,14', otn_var: '0,94%', otn_val: '129,27', ipca: '0,16%', ipcdi: '0,02%', ipcr: '0,27%', cub: '0,25%', inpc: '0,00%', ipcfipe: '0,24%' },
+                { mes: 'Dez', igpm_var: '0,10%', igpm_val: '1.199,68', otn_var: '0,27%', otn_val: '127,93', ipca: '0,56%', ipcdi: '0,15%', ipcr: '-0,01%', cub: '0,31%', igpdi: '0,10%', inpc: '0,40%', ipcfipe: '0,30%' },
+                { mes: 'Nov', igpm_var: '0,59%', igpm_val: '1.204,01', otn_var: '-0,36%', otn_val: '127,59', ipca: '0,28%', ipcdi: '0,33%', ipcr: '0,15%', cub: '0,25%', igpdi: '0,48%', inpc: '0,10%', ipcfipe: '0,25%' },
+                { mes: 'Out', igpm_var: '0,50%', igpm_val: '1.198,97', otn_var: '0,42%', otn_val: '128,05', ipca: '0,24%', ipcdi: '0,40%', ipcr: '0,20%', cub: '0,30%', igpdi: '0,51%', inpc: '0,22%', ipcfipe: '0,33%' },
+                { mes: 'Set', igpm_var: '0,37%', igpm_val: '1.194,67', otn_var: '0,36%', otn_val: '127,52', ipca: '0,26%', ipcdi: '0,35%', ipcr: '0,18%', cub: '0,22%', igpdi: '0,38%', inpc: '0,25%', ipcfipe: '0,28%' },
+                { mes: 'Ago', igpm_var: '0,29%', igpm_val: '1.203,94', otn_var: '-0,77%', otn_val: '127,06', ipca: '0,23%', ipcdi: '0,20%', ipcr: '0,10%', cub: '0,28%', igpdi: '0,30%', inpc: '0,20%', ipcfipe: '0,22%' },
+                { mes: 'Jul', igpm_var: '0,21%', igpm_val: '1.224,39', otn_var: '-1,67%', otn_val: '128,05', ipca: '0,12%', ipcdi: '0,15%', ipcr: '0,05%', cub: '0,20%', igpdi: '0,22%', inpc: '0,15%', ipcfipe: '0,18%' },
+                { mes: 'Jun', igpm_var: '0,10%', igpm_val: '1.230,42', otn_var: '-0,49%', otn_val: '130,22', ipca: '0,08%', ipcdi: '0,05%', ipcr: '-0,05%', cub: '0,15%', igpdi: '0,12%', inpc: '0,10%', ipcfipe: '0,10%' },
+                { mes: 'Mai', igpm_var: '-0,49%', igpm_val: '1.227,47', otn_var: '0,24%', otn_val: '130,86', ipca: '0,26%', ipcdi: '0,34%', ipcr: '-0,49%', cub: '0,60%', igpdi: '-0,40%', inpc: '0,35%', ipcfipe: '0,27%' },
+                { mes: 'Abr', igpm_var: '0,24%', igpm_val: '1.231,66', otn_var: '-0,34%', otn_val: '130,55', ipca: '0,43%', ipcdi: '0,52%', ipcr: '0,24%', cub: '0,27%', igpdi: '0,20%', inpc: '0,48%', ipcfipe: '0,45%' },
+                { mes: 'Mar', igpm_var: '-0,34%', igpm_val: '1.218,74', otn_var: '1,06%', otn_val: '130,99', ipca: '0,56%', ipcdi: '0,44%', ipcr: '-0,34%', cub: '0,12%', igpdi: '-0,20%', inpc: '0,51%', ipcfipe: '0,62%' },
+                { mes: 'Fev', igpm_var: '1,06%', igpm_val: '1.215,46', otn_var: '0,27%', otn_val: '129,62', ipca: '1,31%', ipcdi: '1,18%', ipcr: '1,06%', cub: '1,88%', igpdi: '1,00%', inpc: '1,48%', ipcfipe: '0,51%' },
+                { mes: 'Jan', igpm_var: '0,27%', igpm_val: '1.204,14', otn_var: '0,94%', otn_val: '129,27', ipca: '0,16%', ipcdi: '0,02%', ipcr: '0,27%', cub: '0,25%', igpdi: '0,11%', inpc: '0,00%', ipcfipe: '0,24%' },
             ],
             '2024': [
-                { mes: 'Dez', igpm_var: '0,94%', igpm_val: '1.188,69', otn_var: '1,30%', otn_val: '128,07', ipca: '0,52%', ipcdi: '0,31%', ipcr: '0,94%', cub: '0,17%', inpc: '0,48%', ipcfipe: '0,34%' },
-                { mes: 'Nov', igpm_var: '1,30%', igpm_val: '1.170,09', otn_var: '1,52%', otn_val: '126,42', ipca: '0,39%', ipcdi: '0,15%', ipcr: '1,30%', cub: '0,25%', inpc: '0,35%', ipcfipe: '1,17%' },
+                { mes: 'Dez', igpm_var: '0,94%', igpm_val: '1.188,69', otn_var: '1,30%', otn_val: '128,07', ipca: '0,52%', ipcdi: '0,31%', ipcr: '0,94%', cub: '0,17%', igpdi: '0,87%', inpc: '0,48%', ipcfipe: '0,34%' },
             ]
         };
 
         // --- COMPONENTE MODAL DE HISTÓRICO ---
-        const HistoryModal = ({ isOpen, onClose }) => {
+        const HistoryModal = ({ config, onClose }) => {
             const [selectedYear, setSelectedYear] = React.useState('2026');
             
-            if (!isOpen) return null;
+            if (!config.isOpen) return null;
 
             const dados = dadosPorAno[selectedYear] || [];
+            const singleIndex = config.filterIndex ? indexConfig[config.filterIndex] : null;
 
-            // FUNÇÃO AUXILIAR DE COR: 
-            // Recebe um valor string (ex: "0,41%" ou "-0,01%").
-            // Se tiver "-", retorna Vermelho. Se não, retorna Verde. 
-            // Ignora se for "-" (hífen isolado).
+            // Função de Cor (Verde para positivo, Vermelho para negativo)
             const getTrendColor = (val) => {
-                if (!val || val.trim() === '-') return 'text-neutral';
+                if (!val || val.trim() === '-' || val.trim() === '') return 'text-neutral';
                 if (val.includes('-')) return 'text-down';
                 return 'text-up';
             };
 
             return (
                 <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col overflow-hidden">
+                    <div className={`bg-white rounded-lg shadow-2xl w-full flex flex-col overflow-hidden transition-all ${singleIndex ? 'max-w-3xl' : 'max-w-6xl'}`}>
                         
                         {/* Header do Modal */}
                         <div className="flex items-center justify-between p-4 border-b bg-gray-50">
@@ -110,7 +115,9 @@
                                     <BarChart2 className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-bold text-gray-800">Histórico de Índices Econômicos</h2>
+                                    <h2 className="text-xl font-bold text-gray-800">
+                                        {config.filterIndex ? `Histórico: ${config.filterIndex}` : 'Histórico de Índices Econômicos'}
+                                    </h2>
                                     <p className="text-xs text-gray-500">Consulta consolidada oficial</p>
                                 </div>
                             </div>
@@ -135,45 +142,49 @@
                             </button>
                         </div>
 
-                        {/* Corpo com Tabela (Scrollável) */}
-                        <div className="overflow-auto flex-1 p-0">
+                        {/* Corpo com Tabela */}
+                        <div className="overflow-auto flex-1 p-0 max-h-[70vh]">
                             <table className="min-w-full border-collapse">
                                 <thead className="sticky top-0 z-20 shadow-sm">
-                                    {/* Linha 1 do Header */}
-                                    <tr>
-                                        <th rowSpan="2" className="th-group text-center bg-gray-200">Mês</th>
-                                        
-                                        {/* Índices Agrupados */}
-                                        <th colSpan="2" className="th-group text-blue-800">IGP-M</th>
-                                        <th colSpan="2" className="th-group text-green-800">OTN-MEI</th>
-                                        
-                                        {/* Índices Simples */}
-                                        <th className="th-group">IPCA</th>
-                                        <th className="th-group">IPC-DI</th>
-                                        <th className="th-group">IPC-R</th>
-                                        <th className="th-group">CUB</th>
-                                        <th className="th-group">INPC</th>
-                                        <th className="th-group border-r-0">IPC-FIPE</th>
-                                    </tr>
-                                    
-                                    {/* Linha 2 do Header - REMOVIDO SÍMBOLO % DOS TÍTULOS */}
-                                    <tr>
-                                        {/* Sub-colunas IGP-M */}
-                                        <th className="th-sub text-blue-600">VAR.</th>
-                                        <th className="th-sub text-blue-600">ACUM. (R$)</th>
-                                        
-                                        {/* Sub-colunas OTN-MEI */}
-                                        <th className="th-sub text-green-600">VAR.</th>
-                                        <th className="th-sub text-green-600">VALOR (R$)</th>
-                                        
-                                        {/* Sub-colunas Simples - Títulos Limpos */}
-                                        <th className="th-sub">VAR.</th>
-                                        <th className="th-sub">VAR.</th>
-                                        <th className="th-sub">VAR.</th>
-                                        <th className="th-sub">VAR.</th>
-                                        <th className="th-sub">VAR.</th>
-                                        <th className="th-sub border-r-0">VAR.</th>
-                                    </tr>
+                                    {/* MODO SIMPLES (UM ÍNDICE) */}
+                                    {singleIndex ? (
+                                        <tr>
+                                            <th className="th-header bg-gray-200">Mês</th>
+                                            <th className="th-header text-blue-800">VARIAÇÃO</th>
+                                            {singleIndex.hasValue && (
+                                                <th className="th-header text-green-800">VALOR / ACUM. (R$)</th>
+                                            )}
+                                        </tr>
+                                    ) : (
+                                        /* MODO COMPLETO (TODOS OS ÍNDICES) */
+                                        <>
+                                            <tr>
+                                                <th rowSpan="2" className="th-header bg-gray-200">Mês</th>
+                                                <th colSpan="2" className="th-header text-blue-800">IGP-M</th>
+                                                <th colSpan="2" className="th-header text-green-800">OTN-MEI</th>
+                                                <th className="th-header">IPCA</th>
+                                                <th className="th-header">IPC-DI</th>
+                                                <th className="th-header">IPC-R</th>
+                                                <th className="th-header">CUB</th>
+                                                <th className="th-header">IGP-DI</th>
+                                                <th className="th-header">INPC</th>
+                                                <th className="th-header border-r-0">IPC-FIPE</th>
+                                            </tr>
+                                            <tr>
+                                                <th className="th-sub text-blue-600">VAR.</th>
+                                                <th className="th-sub text-blue-600">ACUM. (R$)</th>
+                                                <th className="th-sub text-green-600">VAR.</th>
+                                                <th className="th-sub text-green-600">VALOR (R$)</th>
+                                                <th className="th-sub">VAR.</th>
+                                                <th className="th-sub">VAR.</th>
+                                                <th className="th-sub">VAR.</th>
+                                                <th className="th-sub">VAR.</th>
+                                                <th className="th-sub">VAR.</th>
+                                                <th className="th-sub">VAR.</th>
+                                                <th className="th-sub border-r-0">VAR.</th>
+                                            </tr>
+                                        </>
+                                    )}
                                 </thead>
                                 
                                 <tbody className="bg-white">
@@ -183,27 +194,42 @@
                                                 <td className="sticky left-0 bg-gray-50 px-4 py-3 text-sm font-bold text-gray-800 border-b border-r border-gray-200 text-center group-hover:bg-blue-100">
                                                     {row.mes}
                                                 </td>
-                                                
-                                                {/* IGP-M: Aplica cor na Variação */}
-                                                <td className={`td-cell bg-blue-50/30 ${getTrendColor(row.igpm_var)}`}>{row.igpm_var}</td>
-                                                <td className="td-cell text-gray-600 bg-blue-50/30">{row.igpm_val}</td>
-                                                
-                                                {/* OTN-MEI: Aplica cor na Variação */}
-                                                <td className={`td-cell bg-green-50/30 ${getTrendColor(row.otn_var)}`}>{row.otn_var}</td>
-                                                <td className="td-cell font-bold text-green-700 bg-green-50/30">R$ {row.otn_val}</td>
-                                                
-                                                {/* Outros Índices: Aplica cor baseada no valor (+ verde, - vermelho) */}
-                                                <td className={`td-cell ${getTrendColor(row.ipca)}`}>{row.ipca}</td>
-                                                <td className={`td-cell ${getTrendColor(row.ipcdi)}`}>{row.ipcdi}</td>
-                                                <td className={`td-cell ${getTrendColor(row.ipcr)}`}>{row.ipcr}</td>
-                                                <td className={`td-cell ${getTrendColor(row.cub)}`}>{row.cub}</td>
-                                                <td className={`td-cell ${getTrendColor(row.inpc)}`}>{row.inpc}</td>
-                                                <td className={`td-cell border-r-0 ${getTrendColor(row.ipcfipe)}`}>{row.ipcfipe}</td>
+
+                                                {/* RENDERIZAÇÃO CONDICIONAL DA LINHA */}
+                                                {singleIndex ? (
+                                                    <>
+                                                        <td className={`td-cell text-lg ${getTrendColor(row[singleIndex.varKey])}`}>
+                                                            {row[singleIndex.varKey]}
+                                                        </td>
+                                                        {singleIndex.hasValue && (
+                                                            <td className="td-cell font-bold text-gray-600 text-lg">
+                                                                {singleIndex.valKey === 'otn_val' ? 'R$ ' : ''}{row[singleIndex.valKey]}
+                                                            </td>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {/* IGP-M */}
+                                                        <td className={`td-cell bg-blue-50/30 ${getTrendColor(row.igpm_var)}`}>{row.igpm_var}</td>
+                                                        <td className="td-cell text-gray-600 bg-blue-50/30">{row.igpm_val}</td>
+                                                        {/* OTN-MEI */}
+                                                        <td className={`td-cell bg-green-50/30 ${getTrendColor(row.otn_var)}`}>{row.otn_var}</td>
+                                                        <td className="td-cell font-bold text-green-700 bg-green-50/30">R$ {row.otn_val}</td>
+                                                        {/* Outros */}
+                                                        <td className={`td-cell ${getTrendColor(row.ipca)}`}>{row.ipca}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.ipcdi)}`}>{row.ipcdi}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.ipcr)}`}>{row.ipcr}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.cub)}`}>{row.cub}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.igpdi)}`}>{row.igpdi}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.inpc)}`}>{row.inpc}</td>
+                                                        <td className={`td-cell border-r-0 ${getTrendColor(row.ipcfipe)}`}>{row.ipcfipe}</td>
+                                                    </>
+                                                )}
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="11" className="p-8 text-center text-gray-400">
+                                            <td colSpan="12" className="p-8 text-center text-gray-400">
                                                 Nenhum dado encontrado para o ano de {selectedYear}.
                                             </td>
                                         </tr>
@@ -231,7 +257,16 @@
 
         // --- APP PRINCIPAL ---
         const App = () => {
-          const [isModalOpen, setIsModalOpen] = React.useState(false);
+          // Estado agora guarda também qual índice foi clicado (null = todos)
+          const [modalConfig, setModalConfig] = React.useState({ isOpen: false, filterIndex: null });
+
+          const openModal = (indexName = null) => {
+              setModalConfig({ isOpen: true, filterIndex: indexName });
+          };
+
+          const closeModal = () => {
+              setModalConfig({ ...modalConfig, isOpen: false });
+          };
 
           // Dados do Painel (Card Principal)
           const indices = [
@@ -249,7 +284,7 @@
           return (
             <div className="min-h-screen bg-[#f0f0f0] font-sans text-gray-700">
               
-              <HistoryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+              <HistoryModal config={modalConfig} onClose={closeModal} />
 
               {/* Header Superior */}
               <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-50">
@@ -300,8 +335,9 @@
                         </h3>
                       </div>
                       
+                      {/* BOTÃO PARA TABELA COMPLETA */}
                       <button 
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => openModal(null)}
                         className="text-[10px] text-gray-500 hover:text-[#0056b3] hover:bg-blue-50 px-2 py-1 rounded flex items-center gap-1 transition-all font-bold border border-transparent hover:border-blue-200"
                       >
                         VER TABELA COMPLETA <ExternalLink className="w-3 h-3" />
@@ -313,9 +349,9 @@
                         {indices.map((item, idx) => (
                           <div 
                             key={idx} 
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => openModal(item.nome)}
                             className="flex-none w-[150px] p-3 hover:bg-blue-50 cursor-pointer transition-all group relative"
-                            title="Clique para ver o histórico detalhado"
+                            title={`Clique para ver o histórico detalhado de ${item.nome}`}
                           >
                             <div className="flex items-center justify-between mb-2">
                               <span className="text-[11px] font-bold text-gray-600 group-hover:text-[#0056b3] transition-colors">
@@ -350,12 +386,12 @@
                     <div className="bg-blue-50/30 px-4 py-1 border-t flex justify-between items-center">
                        <p className="text-[9px] text-gray-400 flex items-center gap-1">
                         <Info className="w-3 h-3" />
-                        Clique em qualquer índice ou no botão superior para ver o histórico.
+                        Clique em qualquer índice para ver seu histórico individual ou no botão superior para ver todos.
                       </p>
                     </div>
                 </div>
 
-                {/* Grid Inferior */}
+                {/* Grid Inferior (Original Mantido) */}
                 <div className="grid grid-cols-12 gap-6">
                   {/* Coluna Esquerda */}
                   <div className="col-span-12 lg:col-span-4">
