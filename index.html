@@ -282,9 +282,18 @@
                 </div>
               </header>
 
-              <nav className="bg-[#a0a0a0] text-white py-2 flex justify-center gap-8 text-sm shadow-inner">
-                {['Agenda', 'SCK', 'Normas', 'Serviços', 'Colaboradores', 'Antena Interna'].map(item => (
-                  <a key={item} href="#" className="hover:text-red-100 font-medium transition-colors">{item}</a>
+              {/* NAV ALTERADA: Fundo Azul Escuro, Setas mais finas e anguladas */}
+              <nav className="bg-[#004494] text-white py-2 flex justify-center gap-8 text-sm shadow-inner">
+                {['Agenda', 'SCK', 'Normas', 'Serviços', 'Colaboradores', 'Antena Interna'].map((item, index, array) => (
+                  <React.Fragment key={item}>
+                    <a href="#" className="hover:text-blue-200 font-medium transition-colors">{item}</a>
+                    {index < array.length - 1 && (
+                      // Seta: strokeWidth="1.5" (mais fina), d="M10 18 16 12 10 6" (mais zig-zag), cor azul claro
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-300/50">
+                        <path d="M10 18 16 12 10 6"/>
+                      </svg>
+                    )}
+                  </React.Fragment>
                 ))}
               </nav>
 
