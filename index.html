@@ -34,7 +34,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // --- Ícones SVG Básicos ---
+        // --- Ícones SVG ---
         const Search = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
         const Calendar = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>;
         const Bell = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>;
@@ -50,38 +50,22 @@
         // --- NOVOS ÍCONES DE TENDÊNCIA (GRÁFICO) ---
         const TrendUpChart = ({ className }) => (
           <svg viewBox="0 0 64 48" fill="none" className={className}>
-            {/* Barras */}
             <rect x="4"  y="22" width="8" height="22" fill="currentColor" />
             <rect x="16" y="16" width="8" height="28" fill="currentColor" />
             <rect x="28" y="10" width="8" height="34" fill="currentColor" />
             <rect x="40" y="6"  width="8" height="38" fill="currentColor" />
-
-            {/* Seta */}
-            <polyline
-              points="6,30 20,18 34,12 50,4"
-              stroke="currentColor"
-              strokeWidth="3"
-              fill="none"
-            />
+            <polyline points="6,30 20,18 34,12 50,4" stroke="currentColor" strokeWidth="3" fill="none" />
             <polygon points="50,4 46,4 50,0 54,4" fill="currentColor" />
           </svg>
         );
 
         const TrendDownChart = ({ className }) => (
           <svg viewBox="0 0 64 48" fill="none" className={className}>
-            {/* Barras */}
             <rect x="4"  y="6"  width="8" height="38" fill="currentColor" />
             <rect x="16" y="10" width="8" height="34" fill="currentColor" />
             <rect x="28" y="16" width="8" height="28" fill="currentColor" />
             <rect x="40" y="22" width="8" height="22" fill="currentColor" />
-
-            {/* Seta */}
-            <polyline
-              points="6,6 20,18 34,24 50,34"
-              stroke="currentColor"
-              strokeWidth="3"
-              fill="none"
-            />
+            <polyline points="6,6 20,18 34,24 50,34" stroke="currentColor" strokeWidth="3" fill="none" />
             <polygon points="50,34 46,34 50,38 54,34" fill="currentColor" />
           </svg>
         );
@@ -147,93 +131,94 @@
                 <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-scale-in">
                     <div className="bg-white rounded-lg shadow-2xl w-full max-w-[95vw] flex flex-col overflow-hidden">
                         
-                        {/* Header com Cores Invertidas */}
+                        {/* Header com Cores Invertidas e Correção do "Roxo" */}
                         <div className="flex items-center justify-between p-4 border-b border-blue-800 bg-[#0056b3] shrink-0">
                             <div className="flex items-center gap-4">
-                                <div className="bg-blue-800 p-2 rounded-md shadow-sm">
+                                <div className="bg-white/20 p-2 rounded-md shadow-sm">
                                     <BarChart2 className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-black text-white uppercase tracking-widest">
                                         {config.filterIndex ? `${config.filterIndex}` : 'Histórico de Índices'}
                                     </h2>
-                                    <p className="text-xs text-blue-200 font-bold uppercase tracking-wide">Base de dados oficial</p>
+                                    <p className="text-xs text-blue-100 font-bold uppercase tracking-wide">Base de dados oficial</p>
                                 </div>
                             </div>
                             
                             <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-2 bg-blue-800 px-3 py-1.5 rounded border border-blue-700 shadow-sm">
-                                    <span className="text-xs font-black text-blue-200 uppercase tracking-wide">Ano:</span>
+                                <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded border border-blue-400/30 shadow-sm">
+                                    <span className="text-xs font-black text-white uppercase tracking-wide">Ano:</span>
                                     <select 
                                         value={selectedYear} 
                                         onChange={(e) => setSelectedYear(e.target.value)}
                                         className="bg-transparent text-sm font-bold text-white outline-none cursor-pointer"
-                                        style={{ backgroundColor: '#0056b3' }}
                                     >
-                                        <option value="2026">2026</option>
-                                        <option value="2025">2025</option>
-                                        <option value="2024">2024</option>
+                                        <option className="text-gray-800" value="2026">2026</option>
+                                        <option className="text-gray-800" value="2025">2025</option>
+                                        <option className="text-gray-800" value="2024">2024</option>
                                     </select>
                                 </div>
-                                <button onClick={onClose} className="p-2 bg-blue-800 rounded-full transition-colors text-blue-200 hover:bg-blue-700 hover:text-white">
+                                <button onClick={onClose} className="p-2 bg-white/20 rounded-full transition-colors text-white hover:bg-white/40">
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
                         </div>
 
-                        {/* Tabela estilo Painel Econômico (GRID) */}
-                        <div className="overflow-auto flex-1 bg-white px-6 py-4 space-y-2">
+                        {/* Tabela com LINHAS DE GRADE */}
+                        <div className="overflow-auto flex-1 bg-white px-6 py-4 space-y-0">
                           {/* Cabeçalho da Tabela */}
-                          <div className="grid grid-cols-12 text-[11px] font-black uppercase tracking-widest text-[#0056b3] border-b pb-2 text-center">
+                          <div className="grid grid-cols-12 text-[11px] font-black uppercase tracking-widest text-[#0056b3] border border-gray-200 bg-gray-50 text-center">
                             {singleIndex ? (
                                 <>
-                                    <div className="col-span-4 text-left">Mês</div>
-                                    <div className="col-span-4">Variação</div>
-                                    {singleIndex.hasValue && <div className="col-span-4">Valor</div>}
+                                    <div className="col-span-4 py-3 border-r border-gray-200 text-left px-4">Mês</div>
+                                    <div className="col-span-4 py-3 border-r border-gray-200">Variação</div>
+                                    {singleIndex.hasValue && <div className="col-span-4 py-3">Valor</div>}
                                 </>
                             ) : (
                                 <>
-                                    <div className="col-span-1 text-left">Mês</div>
-                                    <div className="col-span-2">IGP-M</div>
-                                    <div className="col-span-2">OTN-MEI</div>
-                                    <div className="col-span-1">IPCA</div>
-                                    <div className="col-span-1">IPC-DI</div>
-                                    <div className="col-span-1">IPC-R</div>
-                                    <div className="col-span-1">CUB</div>
-                                    <div className="col-span-1">IGP-DI</div>
-                                    <div className="col-span-1">INPC</div>
-                                    <div className="col-span-1 border-r-0">IPC-FIPE</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200 text-left px-2">Mês</div>
+                                    <div className="col-span-2 py-3 border-r border-gray-200">IGP-M</div>
+                                    <div className="col-span-2 py-3 border-r border-gray-200">OTN-MEI</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200">IPCA</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200">IPC-DI</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200">IPC-R</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200">CUB</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200">IGP-DI</div>
+                                    <div className="col-span-1 py-3 border-r border-gray-200">INPC</div>
+                                    <div className="col-span-1 py-3">IPC-FIPE</div>
                                 </>
                             )}
                           </div>
 
                           {/* Linhas da Tabela */}
-                          {dados.map((row, idx) => (
-                            <div key={idx} className="grid grid-cols-12 items-center bg-white rounded-md px-2 py-3 hover:bg-blue-50 transition shadow-sm text-sm font-bold text-center">
-                              {singleIndex ? (
-                                  <>
-                                    <div className="col-span-4 text-gray-700 text-left">{row.mes}</div>
-                                    <div className={`col-span-4 ${getTableTrendColor(row[singleIndex.varKey])}`}>{cleanText(row[singleIndex.varKey])}</div>
-                                    {singleIndex.hasValue && <div className="col-span-4 text-gray-500">{cleanText(row[singleIndex.valKey])}</div>}
-                                  </>
-                              ) : (
-                                  <>
-                                      <div className="col-span-1 text-gray-700 text-left">{row.mes}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.igpm_var)}`}>{cleanText(row.igpm_var)}</div>
-                                      <div className="col-span-1 text-gray-500">{cleanText(row.igpm_val)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.otn_var)}`}>{cleanText(row.otn_var)}</div>
-                                      <div className="col-span-1 text-gray-500">{cleanText(row.otn_val)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.cub)}`}>{cleanText(row.cub)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</div>
-                                      <div className={`col-span-1 ${getTableTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</div>
-                                      <div className={`col-span-1 border-r-0 ${getTableTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</div>
-                                  </>
-                              )}
-                            </div>
-                          ))}
+                          <div className="border-x border-b border-gray-200">
+                            {dados.map((row, idx) => (
+                                <div key={idx} className="grid grid-cols-12 items-center bg-white hover:bg-blue-50 transition text-sm font-bold text-center border-b border-gray-200 last:border-b-0">
+                                {singleIndex ? (
+                                    <>
+                                        <div className="col-span-4 py-3 border-r border-gray-200 text-gray-700 text-left px-4">{row.mes}</div>
+                                        <div className={`col-span-4 py-3 border-r border-gray-200 ${getTableTrendColor(row[singleIndex.varKey])}`}>{cleanText(row[singleIndex.varKey])}</div>
+                                        {singleIndex.hasValue && <div className="col-span-4 py-3 text-gray-500">{cleanText(row[singleIndex.valKey])}</div>}
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="col-span-1 py-3 border-r border-gray-200 text-gray-700 text-left px-2">{row.mes}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.igpm_var)}`}>{cleanText(row.igpm_var)}</div>
+                                        <div className="col-span-1 py-3 border-r border-gray-200 text-gray-500">{cleanText(row.igpm_val)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.otn_var)}`}>{cleanText(row.otn_var)}</div>
+                                        <div className="col-span-1 py-3 border-r border-gray-200 text-gray-500">{cleanText(row.otn_val)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.cub)}`}>{cleanText(row.cub)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</div>
+                                        <div className={`col-span-1 py-3 border-r border-gray-200 ${getTableTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</div>
+                                        <div className={`col-span-1 py-3 ${getTableTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</div>
+                                    </>
+                                )}
+                                </div>
+                            ))}
+                          </div>
                         </div>
 
                         {/* Footer */}
@@ -341,7 +326,7 @@
                             className="flex-none w-[150px] p-4 hover:bg-blue-50 cursor-pointer transition-all group relative"
                             title={`Clique para ver o histórico detalhado de ${item.nome}`}
                           >
-                            {/* NOVO ÍCONE DE TENDÊNCIA (GRÁFICO) NO TOPO À DIREITA */}
+                            {/* ÍCONE DE TENDÊNCIA NO TOPO À DIREITA */}
                             <div className="absolute top-2 right-2">
                                 {item.status === 'up' ? (
                                     <TrendUpChart className="w-6 h-4 text-green-500" />
@@ -382,7 +367,7 @@
                     </div>
                 </div>
 
-                {/* RESTANTE DO LAYOUT (MANTIDO IGUAL) */}
+                {/* RESTANTE DO LAYOUT */}
                 <div className="grid grid-cols-12 gap-6">
                   {/* Coluna Esquerda */}
                   <div className="col-span-12 lg:col-span-4">
