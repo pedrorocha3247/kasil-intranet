@@ -6,12 +6,12 @@
     <title>Kasil Intranet - Dashboard</title>
     <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React & ReactDOM (Versões estáveis para produção via CDN) -->
+    <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Babel para processar JSX no navegador -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide React (Biblioteca de ícones adaptada para React) -->
+    <!-- Lucide React -->
     <script src="https://unpkg.com/lucide-react"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
@@ -19,27 +19,29 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Ajuste para tabelas com muitas colunas */
+        .table-container { overflow-x: auto; position: relative; }
+        .sticky-col { position: sticky; left: 0; background: white; z-index: 10; border-right: 2px solid #e5e7eb; }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <!-- Importante: type="text/babel" permite que o Babel processe o código abaixo -->
     <script type="text/babel">
-        // ATENÇÃO: Não utilize "import" aqui. 
-        // As bibliotecas já estão disponíveis nos objetos globais: React, ReactDOM e LucideReact.
-
         function App() {
             const [view, setView] = React.useState('dashboard');
 
-            // --- DADOS DO SISTEMA ---
+            // --- DADOS DO SISTEMA (Expandidos conforme planilha image_1a530b.png) ---
             const indicesResumo = [
-                { nome: 'IGP-M', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', status: 'up' },
-                { nome: 'OTN-MEI', mes: 'Jan/26', var: '0,41%', valor: '128,44', status: 'up' },
-                { nome: 'IPCA (IBGE)', mes: 'Nov/25', var: '0,18%', status: 'up' },
-                { nome: 'IPC-DI', mes: 'Dez/25', var: '0,28%', status: 'up' },
-                { nome: 'IGP-DI', mes: 'Dez/25', var: '0,10%', status: 'up' },
-                { nome: 'IPC-R', mes: 'Dez/25', var: '-0,01%', status: 'down' },
+                { nome: 'IGP-M (10)', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', status: 'up' },
+                { nome: 'OTN-MEI (01)', mes: 'Jan/26', var: '0,41%', valor: '128,44', status: 'up' },
+                { nome: 'IPC-DI (15)', mes: 'Dez/25', var: '0,28%', valor: '59,2457', status: 'up' },
+                { nome: 'IGP-DI (04)', mes: 'Dez/25', var: '0,10%', valor: '111,46', status: 'up' },
+                { nome: 'IPC-R (12)', mes: 'Dez/25', var: '-0,01%', valor: '128,8932', status: 'down' },
+                { nome: 'CUB (05)', mes: 'Jan/26', var: '0,31%', valor: '2.015,90', status: 'up' },
+                { nome: 'IPCA (30)', mes: 'Nov/25', var: '0,18%', valor: '14,0024', status: 'up' },
+                { nome: 'INPC (31)', mes: 'Nov/25', var: '0,03%', valor: '14,0113', status: 'up' },
+                { nome: 'IPC-FIPE (32)', mes: 'Dez/25', var: '0,32%', valor: '14,0079', status: 'up' },
             ];
 
             const dadosIndicadores = {
@@ -72,7 +74,60 @@
                 { nome: 'RSC II', valor: '934,05' },
             ];
 
-            // Função auxiliar para renderizar os ícones da Lucide corretamente
+            // Histórico Completo reconstruído com base nas imagens da planilha
+            const historicoCompleto = [
+                { 
+                    mes: 'MAR/2026', 
+                    igpm: { var: '—', valor: '1.207,73' }, 
+                    ipcdi: { var: '—', valor: '59,5780' },
+                    igpdi: { var: '—', valor: '111,58' },
+                    otn: { var: '—', valor: '128,44' },
+                    ipcr: { var: '—', valor: '129,7581' },
+                    cub: '—',
+                    ipca: '—'
+                },
+                { 
+                    mes: 'FEV/2026', 
+                    igpm: { var: '—', valor: '1.202,80' }, 
+                    ipcdi: { var: '—', valor: '59,5780' },
+                    igpdi: { var: '—', valor: '111,58' },
+                    otn: { var: '—', valor: '128,44' },
+                    ipcr: { var: '—', valor: '129,2283' },
+                    cub: '2.015,90',
+                    ipca: '—'
+                },
+                { 
+                    mes: 'JAN/2026', 
+                    igpm: { var: '0,41', valor: '1.202,92' }, 
+                    ipcdi: { var: '—', valor: '59,4116' },
+                    igpdi: { var: '—', valor: '111,47' },
+                    otn: { var: '0,41', valor: '128,44' },
+                    ipcr: { var: '0,41', valor: '129,2412' },
+                    cub: '2.009,72',
+                    ipca: '14,0402'
+                },
+                { 
+                    mes: 'DEZ/2025', 
+                    igpm: { var: '-0,01', valor: '1.199,68' }, 
+                    ipcdi: { var: '0,28', valor: '59,2457' },
+                    igpdi: { var: '0,10', valor: '111,46' },
+                    otn: { var: '0,27', valor: '127,93' },
+                    ipcr: { var: '0,49', valor: '128,8932' },
+                    cub: '2.004,13',
+                    ipca: '14,0150'
+                },
+                { 
+                    mes: 'NOV/2025', 
+                    igpm: { var: '0,27', valor: '1.204,01' }, 
+                    ipcdi: { var: '0,28', valor: '59,1629' },
+                    igpdi: { var: '0,01', valor: '111,49' },
+                    otn: { var: '-0,36', valor: '127,59' },
+                    ipcr: { var: '0,27', valor: '129,3589' },
+                    cub: '2.001,00',
+                    ipca: '14,0024'
+                }
+            ];
+
             const Icon = ({ name, size = 16, className = "" }) => {
                 const LucideIcon = LucideReact[name];
                 if (!LucideIcon) return null;
@@ -80,7 +135,7 @@
             };
 
             return (
-                <div className="min-h-screen flex flex-col">
+                <div className="min-h-screen flex flex-col text-[#333]">
                     {/* Header Principal */}
                     <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
                         <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('dashboard')}>
@@ -144,7 +199,7 @@
                                         </div>
                                     </div>
 
-                                    {/* Comunicados */}
+                                    {/* Comunicados e Cards Centrais */}
                                     <div className="col-span-12 lg:col-span-5 space-y-6">
                                         <div className="bg-[#fffbe6] rounded p-4 border-l-4 border-[#e31e24] shadow-sm">
                                             <h3 className="text-red-700 font-bold text-xs uppercase flex items-center gap-2 tracking-widest"><Icon name="Bell" size={14}/> Comunicados</h3>
@@ -172,8 +227,8 @@
                                                     <span className="text-xl font-black block leading-none">29</span>
                                                     <span className="text-[7px] uppercase font-bold">Janeiro</span>
                                                 </div>
-                                                <div className="text-[10px] font-bold leading-tight">
-                                                    ÁGUAS DE SANTA BÁRBARA<br/>
+                                                <div className="text-[10px] font-bold leading-tight uppercase">
+                                                    Águas de Santa Bárbara<br/>
                                                     <span className="font-normal opacity-80 uppercase block mt-1">Não há agendamentos nesta data.</span>
                                                 </div>
                                             </div>
@@ -187,13 +242,13 @@
                                                     <span className="font-bold text-[10px] uppercase text-gray-400">Cotação OTNMEI</span>
                                                     <div className="flex justify-between mt-1"><span>Atual:</span><span className="font-bold">R$ 127,92</span></div>
                                                 </div>
-                                                <button className="w-full text-center text-[9px] font-black uppercase text-gray-400 mt-2 py-1 bg-gray-50 border border-gray-200 rounded-sm">Ver todos</button>
+                                                <button className="w-full text-center text-[9px] font-black uppercase text-gray-400 mt-2 py-1 bg-gray-50 border border-gray-200 rounded-sm hover:text-[#0056b3]">Ver todos</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* PAINEL DE ÍNDICES ECONÓMICOS */}
+                                {/* PAINEL DE ÍNDICES ECONÔMICOS (EXPANDIDO) */}
                                 <div className="bg-white rounded shadow-md border-t-4 border-[#0056b3] overflow-hidden">
                                     <div className="px-4 py-2 bg-gray-50 border-b flex items-center justify-between">
                                         <div className="flex items-center gap-2">
@@ -204,16 +259,17 @@
                                             Histórico Completo <Icon name="ExternalLink" size={12} />
                                         </button>
                                     </div>
-                                    <div className="overflow-x-auto scrollbar-hide">
+                                    <div className="overflow-x-auto scrollbar-hide bg-white">
                                         <div className="flex min-w-full">
                                             {indicesResumo.map((item, idx) => (
-                                                <div key={idx} className="flex-1 min-w-[170px] p-4 border-r last:border-r-0 hover:bg-blue-50 transition-colors cursor-default">
-                                                    <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">{item.nome}</div>
+                                                <div key={idx} className="flex-1 min-w-[180px] p-4 border-r border-gray-100 last:border-r-0 hover:bg-blue-50 transition-colors cursor-default">
+                                                    <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 truncate">{item.nome}</div>
                                                     <div className="flex items-center gap-3">
                                                         <span className={`text-xl font-black ${item.status === 'up' ? 'text-green-600' : 'text-red-600'}`}>{item.var}</span>
                                                         <div className="flex flex-col">
                                                             <span className="text-[8px] text-gray-400 font-bold uppercase leading-none mb-1">{item.mes}</span>
-                                                            {item.acumulado && <span className="text-[9px] font-black text-gray-700 leading-none">{item.acumulado}</span>}
+                                                            {item.valor && <span className="text-[10px] font-black text-gray-700 leading-none">{item.valor}</span>}
+                                                            {item.acumulado && <span className="text-[10px] font-black text-gray-700 leading-none">{item.acumulado}</span>}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -227,12 +283,11 @@
                         {view === 'indicators' && (
                             <div className="fade-in max-w-6xl mx-auto bg-white rounded shadow-xl border overflow-hidden">
                                 <div className="p-3 border-b bg-gray-50 flex items-center justify-between">
-                                    <h2 className="text-sm font-black text-gray-600 uppercase tracking-widest">Indicadores</h2>
+                                    <h2 className="text-sm font-black text-gray-600 uppercase tracking-widest">Painel de Indicadores</h2>
                                     <button onClick={() => setView('dashboard')} className="p-1 hover:bg-gray-200 rounded text-gray-400"><Icon name="X" size={20} /></button>
                                 </div>
 
                                 <div className="p-8 grid grid-cols-12 gap-y-10 gap-x-8">
-                                    {/* Bloco Superior: Valor US e Títulos Slim */}
                                     <div className="col-span-12 md:col-span-3">
                                         <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Valor US</p>
                                         <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.principais[0].valor}</p>
@@ -258,7 +313,6 @@
                                         </div>
                                     </div>
 
-                                    {/* Bloco Médio: Salário Mínimo e Selector NVIIER */}
                                     <div className="col-span-12 md:col-span-3 border-t pt-8">
                                         <p className="text-2xl font-light text-gray-400 uppercase tracking-tighter">Salário mínimo</p>
                                         <p className="text-3xl font-black text-black mt-1 tracking-tighter">{dadosIndicadores.principais[1].valor}</p>
@@ -288,9 +342,8 @@
                                         </div>
                                     </div>
 
-                                    {/* Tabelas Inferiores */}
                                     <div className="col-span-12 md:col-span-3 border-t pt-8">
-                                        <p className="text-xl font-light text-gray-400 uppercase leading-none mb-2">Cotação<br/>OTNMEI</p>
+                                        <p className="text-xl font-light text-gray-400 uppercase leading-none mb-2 font-bold tracking-tight">COTAÇÃO OTNMEI</p>
                                         <div className="flex justify-between items-center py-2 border-b"><span className="text-[11px] font-bold text-gray-400 uppercase">Valor atual:</span><span className="text-sm font-black text-black tracking-tight">R$ 127,92</span></div>
                                         <table className="w-full mt-4 text-[11px]">
                                             <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Data</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
@@ -302,7 +355,7 @@
                                         <table className="w-full mt-5 text-[11px]">
                                             <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Empreendimento</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
                                             <tbody className="text-gray-800 font-black tracking-tight">
-                                                {taxasConservacao.map(t => (<tr key={t.nome} className="border-b hover:bg-gray-50 transition-colors"><td className="py-2">{t.nome}</td><td className="text-right font-black">{t.valor}</td></tr>))}
+                                                {taxasConservacao.map(t => (<tr key={t.nome} className="border-b hover:bg-gray-50 transition-colors"><td className="py-2 uppercase">{t.nome}</td><td className="text-right font-black">{t.valor}</td></tr>))}
                                             </tbody>
                                         </table>
                                     </div>
@@ -311,7 +364,7 @@
                                         <table className="w-full mt-5 text-[11px]">
                                             <thead className="text-gray-400 border-b uppercase font-bold tracking-widest text-[9px]"><tr><th className="text-left pb-1">Empreendimento</th><th className="text-right pb-1">Valor(R$)</th></tr></thead>
                                             <tbody className="text-gray-800 font-black tracking-tight">
-                                                {melhoramentos.map(t => (<tr key={t.nome} className="border-b hover:bg-gray-50 transition-colors"><td className="py-2">{t.nome}</td><td className="text-right font-black">{t.valor}</td></tr>))}
+                                                {melhoramentos.map(t => (<tr key={t.nome} className="border-b hover:bg-gray-50 transition-colors"><td className="py-2 uppercase">{t.nome}</td><td className="text-right font-black">{t.valor}</td></tr>))}
                                             </tbody>
                                         </table>
                                     </div>
@@ -325,36 +378,60 @@
                                     <button onClick={() => setView('dashboard')} className="flex items-center gap-2 text-[11px] font-black text-gray-400 hover:text-gray-700 uppercase tracking-widest transition-colors">
                                         <Icon name="ArrowLeft" size={14} /> Voltar ao Dashboard
                                     </button>
-                                    <h2 className="text-sm font-black text-[#0056b3] uppercase tracking-[0.2em]">Histórico de Índices</h2>
+                                    <h2 className="text-sm font-black text-[#0056b3] uppercase tracking-[0.2em]">Histórico Completo de Índices</h2>
                                     <div className="w-24"></div>
                                 </div>
-                                <div className="bg-white rounded-b-lg shadow-xl border overflow-hidden mx-auto max-w-5xl">
-                                    <table className="w-full text-center text-xs border-collapse">
+                                <div className="bg-white rounded-b-lg shadow-xl border overflow-hidden mx-auto table-container">
+                                    <table className="w-full text-center text-[10px] border-collapse min-w-[1200px]">
                                         <thead>
-                                            <tr className="bg-[#e9ecef] text-[11px] font-black text-gray-600 uppercase tracking-widest border-b">
-                                                <th className="p-5 border-r w-1/4">Referência</th>
-                                                <th className="p-5 border-r w-1/4">IGP-M (%)</th>
-                                                <th className="p-5 border-r w-1/4">OTN-MEI (R$)</th>
-                                                <th className="p-5 w-1/4">CUB/SINDUSCON (R$)</th>
+                                            <tr className="bg-[#e9ecef] text-gray-500 uppercase font-black tracking-widest border-b">
+                                                <th className="p-4 border-r sticky-col">Mês/Referência</th>
+                                                <th className="p-4 border-r" colSpan="2">IGP-M (10)</th>
+                                                <th className="p-4 border-r" colSpan="2">IPC-DI (15)</th>
+                                                <th className="p-4 border-r" colSpan="2">IGP-DI (04)</th>
+                                                <th className="p-4 border-r" colSpan="2">OTN-MEI (01)</th>
+                                                <th className="p-4 border-r" colSpan="2">IPC-R (12)</th>
+                                                <th className="p-4 border-r">CUB (05)</th>
+                                                <th className="p-4">IPCA (30)</th>
+                                            </tr>
+                                            <tr className="bg-gray-50 text-[8px] text-gray-400 uppercase tracking-widest border-b">
+                                                <th className="p-2 border-r sticky-col">Período</th>
+                                                <th className="p-2">VAR %</th>
+                                                <th className="p-2 border-r">ÍNDICE</th>
+                                                <th className="p-2">VAR %</th>
+                                                <th className="p-2 border-r">ÍNDICE</th>
+                                                <th className="p-2">VAR %</th>
+                                                <th className="p-2 border-r">ÍNDICE</th>
+                                                <th className="p-2">VAR %</th>
+                                                <th className="p-2 border-r">VALOR</th>
+                                                <th className="p-2">VAR %</th>
+                                                <th className="p-2 border-r">ÍNDICE</th>
+                                                <th className="p-2 border-r">VALOR ACUM.</th>
+                                                <th className="p-2">ÍNDICE</th>
                                             </tr>
                                         </thead>
                                         <tbody className="font-bold text-gray-800">
-                                            <tr className="border-b transition-colors hover:bg-blue-50/50">
-                                                <td className="p-5 border-r uppercase font-black text-gray-700">Jan/2026</td>
-                                                <td className="p-5 border-r text-green-600 font-black text-base">0,41%</td>
-                                                <td className="p-5 border-r text-gray-600">128,44</td>
-                                                <td className="p-5 font-black text-gray-900">2.015,90</td>
-                                            </tr>
-                                            <tr className="border-b bg-gray-50/30 transition-colors hover:bg-blue-50/50">
-                                                <td className="p-5 border-r uppercase font-black text-gray-700">Dez/2025</td>
-                                                <td className="p-5 border-r text-red-600 font-black text-base">-0,01%</td>
-                                                <td className="p-5 border-r text-gray-600">127,93</td>
-                                                <td className="p-5 font-black text-gray-900">2.004,13</td>
-                                            </tr>
+                                            {historicoCompleto.map((row, i) => (
+                                                <tr key={i} className="border-b transition-colors hover:bg-blue-50/50">
+                                                    <td className="p-3 border-r sticky-col uppercase font-black">{row.mes}</td>
+                                                    <td className={`p-3 ${parseFloat(row.igpm.var) >= 0 ? 'text-green-600' : 'text-red-600'}`}>{row.igpm.var}{row.igpm.var !== '—' && '%'}</td>
+                                                    <td className="p-3 border-r text-gray-500">{row.igpm.valor}</td>
+                                                    <td className="p-3 text-blue-600">{row.ipcdi.var}{row.ipcdi.var !== '—' && '%'}</td>
+                                                    <td className="p-3 border-r text-gray-500">{row.ipcdi.valor}</td>
+                                                    <td className="p-3 text-gray-600">{row.igpdi.var}{row.igpdi.var !== '—' && '%'}</td>
+                                                    <td className="p-3 border-r text-gray-500">{row.igpdi.valor}</td>
+                                                    <td className={`p-3 ${parseFloat(row.otn.var) >= 0 ? 'text-green-600' : 'text-red-600'}`}>{row.otn.var}{row.otn.var !== '—' && '%'}</td>
+                                                    <td className="p-3 border-r bg-yellow-50/30">{row.otn.valor}</td>
+                                                    <td className="p-3 text-green-600">{row.ipcr.var}{row.ipcr.var !== '—' && '%'}</td>
+                                                    <td className="p-3 border-r text-gray-500">{row.ipcr.valor}</td>
+                                                    <td className="p-3 border-r font-black">{row.cub}</td>
+                                                    <td className="p-3 text-gray-500">{row.ipca}</td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
-                                    <div className="p-4 bg-gray-50 text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center border-t italic">
-                                        * Valores atualizados conforme publicação oficial dos órgãos reguladores.
+                                    <div className="p-4 bg-gray-50 text-[9px] text-gray-400 font-bold uppercase tracking-widest text-center border-t italic">
+                                        * Dados consolidados conforme planilha oficial de gestão de índices econômicos.
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +449,6 @@
             );
         }
 
-        // Inicialização do React 18 no navegador
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
