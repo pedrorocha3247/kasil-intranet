@@ -7,18 +7,18 @@
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Estilo da Tabela */
-        .table-header { @apply px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0; }
-        .table-cell { @apply px-3 py-3 whitespace-nowrap text-sm text-gray-600 border-b border-gray-100; }
+        /* Estilos da Tabela Complexa */
+        .th-group { @apply px-2 py-2 text-center text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-100 border-b border-r border-gray-300; }
+        .th-sub { @apply px-2 py-2 text-center text-[10px] font-bold text-gray-500 uppercase bg-gray-50 border-b border-r border-gray-200; }
+        .td-cell { @apply px-3 py-3 whitespace-nowrap text-sm text-gray-600 border-b border-r border-gray-100 text-center; }
+        
         .animate-fade-in { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
@@ -38,82 +38,163 @@
         const Info = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>;
         const ExternalLink = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>;
         const X = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>;
+        const Filter = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
 
-        // --- DADOS DO HISTÓRICO (Simulados) ---
-        const historicoCompleto = [
-            { mes: 'Jan/26', igpm: '0,41%', ipca: '0,25%', ipcdi: '0,28%', otn: '128,44', ipcr: '-', cub: '-', igpdi: '-', inpc: '-', ipcfipe: '0,38%' },
-            { mes: 'Dez/25', igpm: '0,10%', ipca: '0,56%', ipcdi: '0,15%', otn: '127,92', ipcr: '-0,01%', cub: '0,31%', igpdi: '0,10%', inpc: '0,40%', ipcfipe: '0,30%' },
-            { mes: 'Nov/25', igpm: '0,59%', ipca: '0,28%', ipcdi: '0,33%', otn: '127,50', ipcr: '0,15%', cub: '0,25%', igpdi: '0,48%', inpc: '0,10%', ipcfipe: '0,25%' },
-            { mes: 'Out/25', igpm: '0,50%', ipca: '0,24%', ipcdi: '0,40%', otn: '127,00', ipcr: '0,20%', cub: '0,30%', igpdi: '0,51%', inpc: '0,22%', ipcfipe: '0,33%' },
-            { mes: 'Set/25', igpm: '0,37%', ipca: '0,26%', ipcdi: '0,35%', otn: '126,45', ipcr: '0,18%', cub: '0,22%', igpdi: '0,38%', inpc: '0,25%', ipcfipe: '0,28%' },
-            { mes: 'Ago/25', igpm: '0,29%', ipca: '0,23%', ipcdi: '0,20%', otn: '125,90', ipcr: '0,10%', cub: '0,28%', igpdi: '0,30%', inpc: '0,20%', ipcfipe: '0,22%' },
-            { mes: 'Jul/25', igpm: '0,21%', ipca: '0,12%', ipcdi: '0,15%', otn: '125,40', ipcr: '0,05%', cub: '0,20%', igpdi: '0,22%', inpc: '0,15%', ipcfipe: '0,18%' },
-            { mes: 'Jun/25', igpm: '0,10%', ipca: '0,08%', ipcdi: '0,05%', otn: '125,00', ipcr: '-0,05%', cub: '0,15%', igpdi: '0,12%', inpc: '0,10%', ipcfipe: '0,10%' },
-        ];
+        // --- DADOS FICTÍCIOS POR ANO ---
+        const dadosPorAno = {
+            '2026': [
+                { mes: 'Jan', igpm_var: '0,41%', igpm_val: '1.207,73', otn_var: '0,41%', otn_val: '128,44', ipca: '0,25%', ipcdi: '0,28%', ipcr: '-', cub: '-', inpc: '-', ipcfipe: '0,38%' },
+            ],
+            '2025': [
+                { mes: 'Dez', igpm_var: '0,10%', igpm_val: '1.199,68', otn_var: '0,27%', otn_val: '127,93', ipca: '0,56%', ipcdi: '0,15%', ipcr: '-0,01%', cub: '0,31%', inpc: '0,40%', ipcfipe: '0,30%' },
+                { mes: 'Nov', igpm_var: '0,59%', igpm_val: '1.204,01', otn_var: '-0,36%', otn_val: '127,59', ipca: '0,28%', ipcdi: '0,33%', ipcr: '0,15%', cub: '0,25%', inpc: '0,10%', ipcfipe: '0,25%' },
+                { mes: 'Out', igpm_var: '0,50%', igpm_val: '1.198,97', otn_var: '0,42%', otn_val: '128,05', ipca: '0,24%', ipcdi: '0,40%', ipcr: '0,20%', cub: '0,30%', inpc: '0,22%', ipcfipe: '0,33%' },
+                { mes: 'Set', igpm_var: '0,37%', igpm_val: '1.194,67', otn_var: '0,36%', otn_val: '127,52', ipca: '0,26%', ipcdi: '0,35%', ipcr: '0,18%', cub: '0,22%', inpc: '0,25%', ipcfipe: '0,28%' },
+                { mes: 'Ago', igpm_var: '0,29%', igpm_val: '1.203,94', otn_var: '-0,77%', otn_val: '127,06', ipca: '0,23%', ipcdi: '0,20%', ipcr: '0,10%', cub: '0,28%', inpc: '0,20%', ipcfipe: '0,22%' },
+                { mes: 'Jul', igpm_var: '0,21%', igpm_val: '1.224,39', otn_var: '-1,67%', otn_val: '128,05', ipca: '0,12%', ipcdi: '0,15%', ipcr: '0,05%', cub: '0,20%', inpc: '0,15%', ipcfipe: '0,18%' },
+                { mes: 'Jun', igpm_var: '0,10%', igpm_val: '1.230,42', otn_var: '-0,49%', otn_val: '130,22', ipca: '0,08%', ipcdi: '0,05%', ipcr: '-0,05%', cub: '0,15%', inpc: '0,10%', ipcfipe: '0,10%' },
+                { mes: 'Mai', igpm_var: '-0,49%', igpm_val: '1.227,47', otn_var: '0,24%', otn_val: '130,86', ipca: '0,26%', ipcdi: '0,34%', ipcr: '-0,49%', cub: '0,60%', inpc: '0,35%', ipcfipe: '0,27%' },
+                { mes: 'Abr', igpm_var: '0,24%', igpm_val: '1.231,66', otn_var: '-0,34%', otn_val: '130,55', ipca: '0,43%', ipcdi: '0,52%', ipcr: '0,24%', cub: '0,27%', inpc: '0,48%', ipcfipe: '0,45%' },
+                { mes: 'Mar', igpm_var: '-0,34%', igpm_val: '1.218,74', otn_var: '1,06%', otn_val: '130,99', ipca: '0,56%', ipcdi: '0,44%', ipcr: '-0,34%', cub: '0,12%', inpc: '0,51%', ipcfipe: '0,62%' },
+                { mes: 'Fev', igpm_var: '1,06%', igpm_val: '1.215,46', otn_var: '0,27%', otn_val: '129,62', ipca: '1,31%', ipcdi: '1,18%', ipcr: '1,06%', cub: '1,88%', inpc: '1,48%', ipcfipe: '0,51%' },
+                { mes: 'Jan', igpm_var: '0,27%', igpm_val: '1.204,14', otn_var: '0,94%', otn_val: '129,27', ipca: '0,16%', ipcdi: '0,02%', ipcr: '0,27%', cub: '0,25%', inpc: '0,00%', ipcfipe: '0,24%' },
+            ],
+            '2024': [
+                { mes: 'Dez', igpm_var: '0,94%', igpm_val: '1.188,69', otn_var: '1,30%', otn_val: '128,07', ipca: '0,52%', ipcdi: '0,31%', ipcr: '0,94%', cub: '0,17%', inpc: '0,48%', ipcfipe: '0,34%' },
+                { mes: 'Nov', igpm_var: '1,30%', igpm_val: '1.170,09', otn_var: '1,52%', otn_val: '126,42', ipca: '0,39%', ipcdi: '0,15%', ipcr: '1,30%', cub: '0,25%', inpc: '0,35%', ipcfipe: '1,17%' },
+                // ... mais dados
+            ]
+        };
 
         // --- COMPONENTE MODAL DE HISTÓRICO ---
         const HistoryModal = ({ isOpen, onClose }) => {
+            const [selectedYear, setSelectedYear] = React.useState('2026');
+            
             if (!isOpen) return null;
 
+            const dados = dadosPorAno[selectedYear] || [];
+
             return (
-                <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden">
+                <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col overflow-hidden">
                         
                         {/* Header do Modal */}
                         <div className="flex items-center justify-between p-4 border-b bg-gray-50">
-                            <div className="flex items-center gap-3">
-                                <BarChart2 className="w-6 h-6 text-[#0056b3]" />
+                            <div className="flex items-center gap-4">
+                                <div className="bg-[#0056b3] p-2 rounded-md">
+                                    <BarChart2 className="w-6 h-6 text-white" />
+                                </div>
                                 <div>
-                                    <h2 className="text-lg font-bold text-gray-800">Histórico de Índices Econômicos</h2>
-                                    <p className="text-xs text-gray-500">Tabela consolidada dos últimos 12 meses</p>
+                                    <h2 className="text-xl font-bold text-gray-800">Histórico de Índices Econômicos</h2>
+                                    <p className="text-xs text-gray-500">Consulta consolidada oficial</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-red-500">
+                            
+                            {/* Filtro de Ano */}
+                            <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded border border-gray-300 shadow-sm">
+                                <Filter className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-bold text-gray-600">Ano:</span>
+                                <select 
+                                    value={selectedYear} 
+                                    onChange={(e) => setSelectedYear(e.target.value)}
+                                    className="bg-transparent text-sm font-bold text-[#0056b3] outline-none cursor-pointer"
+                                >
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                            </div>
+
+                            <button onClick={onClose} className="p-2 hover:bg-red-50 rounded-full transition-colors text-gray-400 hover:text-red-500">
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
 
                         {/* Corpo com Tabela (Scrollável) */}
                         <div className="overflow-auto flex-1 p-0">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full border-collapse">
+                                <thead className="sticky top-0 z-20 shadow-sm">
+                                    {/* Linha 1 do Header: Nomes dos Índices */}
                                     <tr>
-                                        <th scope="col" className="sticky top-0 left-0 z-20 bg-gray-100 px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-r">Mês/Ano</th>
-                                        <th scope="col" className="table-header">IGP-M</th>
-                                        <th scope="col" className="table-header">IPCA</th>
-                                        <th scope="col" className="table-header">IPC-DI</th>
-                                        <th scope="col" className="table-header">OTN-MEI</th>
-                                        <th scope="col" className="table-header">IPC-R</th>
-                                        <th scope="col" className="table-header">CUB</th>
-                                        <th scope="col" className="table-header">IGP-DI</th>
-                                        <th scope="col" className="table-header">INPC</th>
-                                        <th scope="col" className="table-header">IPC-FIPE</th>
+                                        <th rowSpan="2" className="th-group text-left bg-gray-200">Mês</th>
+                                        
+                                        {/* Índices com Coluna Dupla */}
+                                        <th colSpan="2" className="th-group text-blue-800">IGP-M</th>
+                                        <th colSpan="2" className="th-group text-green-800">OTN-MEI</th>
+                                        
+                                        {/* Índices Simples */}
+                                        <th colSpan="1" className="th-group">IPCA</th>
+                                        <th colSpan="1" className="th-group">IPC-DI</th>
+                                        <th colSpan="1" className="th-group">IPC-R</th>
+                                        <th colSpan="1" className="th-group">CUB</th>
+                                        <th colSpan="1" className="th-group">INPC</th>
+                                        <th colSpan="1" className="th-group border-r-0">IPC-FIPE</th>
+                                    </tr>
+                                    
+                                    {/* Linha 2 do Header: Tipo de Dado (% ou R$) */}
+                                    <tr>
+                                        {/* Sub-colunas IGP-M */}
+                                        <th className="th-sub text-blue-600">% VAR</th>
+                                        <th className="th-sub text-blue-600">ACUM. (R$)</th>
+                                        
+                                        {/* Sub-colunas OTN-MEI */}
+                                        <th className="th-sub text-green-600">% VAR</th>
+                                        <th className="th-sub text-green-600">VALOR (R$)</th>
+                                        
+                                        {/* Sub-colunas Simples */}
+                                        <th className="th-sub">%</th>
+                                        <th className="th-sub">%</th>
+                                        <th className="th-sub">%</th>
+                                        <th className="th-sub">%</th>
+                                        <th className="th-sub">%</th>
+                                        <th className="th-sub border-r-0">%</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {historicoCompleto.map((row, idx) => (
-                                        <tr key={idx} className="hover:bg-blue-50 transition-colors">
-                                            <td className="sticky left-0 z-10 bg-white px-4 py-3 whitespace-nowrap text-sm font-bold text-gray-800 border-r group-hover:bg-blue-50">{row.mes}</td>
-                                            <td className="table-cell font-medium text-blue-600">{row.igpm}</td>
-                                            <td className="table-cell">{row.ipca}</td>
-                                            <td className="table-cell">{row.ipcdi}</td>
-                                            <td className="table-cell text-green-600 font-bold">R$ {row.otn}</td>
-                                            <td className="table-cell">{row.ipcr}</td>
-                                            <td className="table-cell">{row.cub}</td>
-                                            <td className="table-cell">{row.igpdi}</td>
-                                            <td className="table-cell">{row.inpc}</td>
-                                            <td className="table-cell">{row.ipcfipe}</td>
+                                
+                                <tbody className="bg-white">
+                                    {dados.length > 0 ? (
+                                        dados.map((row, idx) => (
+                                            <tr key={idx} className="hover:bg-blue-50 transition-colors group">
+                                                <td className="sticky left-0 bg-gray-50 px-4 py-3 text-sm font-bold text-gray-800 border-b border-r border-gray-200 group-hover:bg-blue-100">
+                                                    {row.mes}
+                                                </td>
+                                                
+                                                {/* IGP-M Dados */}
+                                                <td className="td-cell font-bold text-blue-600 bg-blue-50/30">{row.igpm_var}</td>
+                                                <td className="td-cell text-gray-500 bg-blue-50/30">{row.igpm_val}</td>
+                                                
+                                                {/* OTN-MEI Dados */}
+                                                <td className="td-cell font-bold text-green-600 bg-green-50/30">{row.otn_var}</td>
+                                                <td className="td-cell font-bold text-green-700 bg-green-50/30">R$ {row.otn_val}</td>
+                                                
+                                                {/* Outros Dados */}
+                                                <td className="td-cell">{row.ipca}</td>
+                                                <td className="td-cell">{row.ipcdi}</td>
+                                                <td className="td-cell">{row.ipcr}</td>
+                                                <td className="td-cell">{row.cub}</td>
+                                                <td className="td-cell">{row.inpc}</td>
+                                                <td className="td-cell border-r-0">{row.ipcfipe}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="11" className="p-8 text-center text-gray-400">
+                                                Nenhum dado encontrado para o ano de {selectedYear}.
+                                            </td>
                                         </tr>
-                                    ))}
+                                    )}
                                 </tbody>
                             </table>
                         </div>
 
                         {/* Footer do Modal */}
-                        <div className="p-4 border-t bg-gray-50 flex justify-end">
+                        <div className="p-4 border-t bg-gray-50 flex justify-between items-center">
+                            <p className="text-[10px] text-gray-400 max-w-lg">
+                                * Dados consolidados para fins de consulta interna. OTN-MEI postecipada em 01 mês conforme regra vigente.
+                            </p>
                             <button 
                                 onClick={onClose}
-                                className="px-4 py-2 bg-[#0056b3] text-white text-sm font-bold rounded hover:bg-blue-700 transition-colors"
+                                className="px-6 py-2 bg-[#0056b3] text-white text-sm font-bold rounded hover:bg-blue-700 transition-colors shadow-sm"
                             >
                                 Fechar Tabela
                             </button>
@@ -125,10 +206,9 @@
 
         // --- APP PRINCIPAL ---
         const App = () => {
-          // Estado para controlar a visibilidade do Modal
           const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-          // Dados do Painel (Apenas o mês atual)
+          // Dados do Painel (Card Principal)
           const indices = [
             { nome: 'IGP-M', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', status: 'up' },
             { nome: 'IPCA', mes: 'Jan/26', var: '0,25%', status: 'up' },
@@ -144,7 +224,6 @@
           return (
             <div className="min-h-screen bg-[#f0f0f0] font-sans text-gray-700">
               
-              {/* Renderização Condicional do Modal */}
               <HistoryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
               {/* Header Superior */}
@@ -178,14 +257,12 @@
                 </div>
               </header>
 
-              {/* Menu Secundário */}
               <nav className="bg-[#a0a0a0] text-white py-2 flex justify-center gap-8 text-sm shadow-inner">
                 {['Agenda', 'SCK', 'Normas', 'Serviços', 'Colaboradores', 'Antena Interna'].map(item => (
                   <a key={item} href="#" className="hover:text-red-200 transition-colors">{item}</a>
                 ))}
               </nav>
 
-              {/* Container Principal */}
               <div className="p-6 max-w-[1400px] mx-auto space-y-6 relative">
                 
                 {/* --- PAINEL DE ÍNDICES --- */}
@@ -198,7 +275,6 @@
                         </h3>
                       </div>
                       
-                      {/* BOTÃO QUE ABRE O MODAL */}
                       <button 
                         onClick={() => setIsModalOpen(true)}
                         className="text-[10px] text-gray-500 hover:text-[#0056b3] hover:bg-blue-50 px-2 py-1 rounded flex items-center gap-1 transition-all font-bold border border-transparent hover:border-blue-200"
@@ -254,9 +330,8 @@
                     </div>
                 </div>
 
-                {/* Grid Inferior (Original) */}
+                {/* Grid Inferior */}
                 <div className="grid grid-cols-12 gap-6">
-                  
                   {/* Coluna Esquerda */}
                   <div className="col-span-12 lg:col-span-4">
                     <div className="bg-white rounded shadow-md relative overflow-hidden min-h-[300px]">
@@ -358,7 +433,6 @@
                   </div>
                 </div>
 
-                {/* Rodapé */}
                 <footer className="mt-12 space-y-8 pb-10">
                   <div className="flex justify-center items-center gap-6 text-[10px] text-gray-400 font-bold uppercase border-t pt-8">
                     <a href="#" className="hover:text-red-500">Fale Conosco</a>
