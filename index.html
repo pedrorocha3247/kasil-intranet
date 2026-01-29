@@ -17,33 +17,10 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* --- ESTILOS DA TABELA LIMPA --- */
-        
-        /* Header Principal */
-        .th-main { 
-            @apply px-2 py-4 text-center align-middle text-[11px] font-black text-[#0056b3] uppercase tracking-[0.1em] bg-[#f8f9fa] border-b border-r border-gray-200; 
-            height: 50px; /* Altura fixa para alinhar tudo */
-        }
-        
-        /* Célula de Dados */
-        .td-cell { 
-            @apply px-2 py-3 whitespace-nowrap text-xs font-bold border-b border-r border-gray-100 text-center align-middle transition-colors; 
-        }
-        
-        /* Coluna Sticky (Mês) */
-        .sticky-col {
-            @apply sticky left-0 z-10 bg-[#f8f9fa] border-r border-gray-300 font-black text-gray-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)];
-        }
-        
-        /* Sticky para o corpo da tabela */
-        .sticky-col-body {
-            @apply sticky left-0 z-10 bg-white border-r border-gray-200 font-black text-gray-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.02)];
-        }
-
-        /* Cores utilitárias */
+        /* Cores utilitárias usadas pela função getTrendColor */
         .text-up { @apply text-green-600 font-black; }
         .text-down { @apply text-red-600 font-black; }
-        .text-neutral { @apply text-gray-600 font-bold; } /* Cor neutra para valores monetários */
+        .text-neutral { @apply text-gray-400 font-bold; }
         
         .animate-scale-in { animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -110,8 +87,7 @@
             if (!config.isOpen) return null;
 
             const dados = dadosPorAno[selectedYear] || [];
-            const singleIndex = config.filterIndex ? indexConfig[config.filterIndex] : null;
-
+            
             // Função para limpar o texto (remover % e R$ e espaços)
             const cleanText = (val) => {
                 if (!val) return '-';
@@ -127,7 +103,7 @@
 
             return (
                 <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-scale-in">
-                    <div className={`bg-white rounded-lg shadow-2xl w-full flex flex-col overflow-hidden transition-all duration-300 ${singleIndex ? 'max-w-3xl' : 'max-w-[95vw]'}`}>
+                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-[95vw] flex flex-col overflow-hidden">
                         
                         {/* Header */}
                         <div className="flex items-center justify-between p-4 border-b bg-[#f8f9fa] shrink-0">
@@ -162,86 +138,56 @@
                             </div>
                         </div>
 
-                        {/* Tabela */}
-                        <div className="overflow-auto flex-1 bg-white">
-                            <table className="min-w-full border-separate border-spacing-0">
-                                <thead className="sticky top-0 z-20 shadow-md">
-                                    {singleIndex ? (
-                                        // HEADER SIMPLES (Card View)
-                                        <tr>
-                                            <th className="th-main sticky-col">MÊS</th>
-                                            <th className="th-main">VAR.</th>
-                                            {singleIndex.hasValue && (
-                                                <th className="th-main">VALOR</th>
-                                            )}
-                                        </tr>
-                                    ) : (
-                                        // HEADER COMPLETO (Uma única linha, sem sub-cabeçalhos destacados)
-                                        <tr>
-                                            <th className="th-main sticky-col">MÊS</th>
-                                            <th colSpan="2" className="th-main text-[#0056b3]">IGP-M</th>
-                                            <th colSpan="2" className="th-main text-[#0056b3]">OTN-MEI</th>
-                                            <th className="th-main">IPCA</th>
-                                            <th className="th-main">IPC-DI</th>
-                                            <th className="th-main">IPC-R</th>
-                                            <th className="th-main">CUB</th>
-                                            <th className="th-main">IGP-DI</th>
-                                            <th className="th-main">INPC</th>
-                                            <th className="th-main border-r-0">IPC-FIPE</th>
-                                        </tr>
-                                    )}
-                                </thead>
-                                
-                                <tbody className="bg-white">
-                                    {dados.length > 0 ? (
-                                        dados.map((row, idx) => (
-                                            <tr key={idx} className="hover:bg-blue-50/50 transition-colors group">
-                                                <td className="sticky-col-body td-cell text-gray-900 group-hover:bg-blue-50/50">
-                                                    {row.mes}
-                                                </td>
+                        {/* Tabela estilo Painel Econômico (NOVA ESTRUTURA GRID) */}
+                        <div className="overflow-auto flex-1 bg-white px-6 py-4 space-y-2">
+                          {/* Cabeçalho */}
+                          <div className="grid grid-cols-12 text-[11px] font-black uppercase tracking-widest text-[#0056b3] border-b pb-2 text-center">
+                            <div className="col-span-1 text-left">Mês</div>
+                            <div className="col-span-2">IGP-M</div>
+                            <div className="col-span-2">OTN-MEI</div>
+                            <div className="col-span-1">IPCA</div>
+                            <div className="col-span-1">IPC-DI</div>
+                            <div className="col-span-1">IPC-R</div>
+                            <div className="col-span-1">CUB</div>
+                            <div className="col-span-1">IGP-DI</div>
+                            <div className="col-span-1">INPC</div>
+                            <div className="col-span-1 border-r-0">IPC-FIPE</div>
+                          </div>
 
-                                                {singleIndex ? (
-                                                    <>
-                                                        <td className={`td-cell text-lg ${getTrendColor(row[singleIndex.varKey])}`}>
-                                                            {cleanText(row[singleIndex.varKey])}
-                                                        </td>
-                                                        {singleIndex.hasValue && (
-                                                            <td className="td-cell text-neutral text-lg">
-                                                                {cleanText(row[singleIndex.valKey])}
-                                                            </td>
-                                                        )}
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        {/* IGP-M: Coluna 1 (Var) Colorida, Coluna 2 (Valor) Neutra */}
-                                                        <td className={`td-cell ${getTrendColor(row.igpm_var)}`}>{cleanText(row.igpm_var)}</td>
-                                                        <td className="td-cell text-neutral">{cleanText(row.igpm_val)}</td>
-                                                        
-                                                        {/* OTN-MEI: Coluna 1 (Var) Colorida, Coluna 2 (Valor) Neutra */}
-                                                        <td className={`td-cell ${getTrendColor(row.otn_var)}`}>{cleanText(row.otn_var)}</td>
-                                                        <td className="td-cell text-neutral">{cleanText(row.otn_val)}</td>
-                                                        
-                                                        {/* Outros Índices: Apenas Var (Colorida) */}
-                                                        <td className={`td-cell ${getTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.cub)}`}>{cleanText(row.cub)}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</td>
-                                                        <td className={`td-cell border-r-0 ${getTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</td>
-                                                    </>
-                                                )}
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="12" className="p-10 text-center text-gray-400 italic font-medium">
-                                                Nenhum dado registrado para {selectedYear}.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
+                          {/* Linhas */}
+                          {dados.map((row, idx) => (
+                            <div
+                              key={idx}
+                              className="grid grid-cols-12 items-center bg-white rounded-md px-2 py-3 hover:bg-blue-50 transition shadow-sm text-sm font-bold text-center"
+                            >
+                              <div className="col-span-1 text-gray-700 text-left">{row.mes}</div>
+
+                              {/* IGP-M */}
+                              <div className={`col-span-1 ${getTrendColor(row.igpm_var)}`}>
+                                {cleanText(row.igpm_var)}
+                              </div>
+                              <div className="col-span-1 text-gray-500">
+                                {cleanText(row.igpm_val)}
+                              </div>
+
+                              {/* OTN */}
+                              <div className={`col-span-1 ${getTrendColor(row.otn_var)}`}>
+                                {cleanText(row.otn_var)}
+                              </div>
+                              <div className="col-span-1 text-gray-500">
+                                {cleanText(row.otn_val)}
+                              </div>
+
+                              {/* Demais */}
+                              <div className={`col-span-1 ${getTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</div>
+                              <div className={`col-span-1 ${getTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</div>
+                              <div className={`col-span-1 ${getTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</div>
+                              <div className={`col-span-1 ${getTrendColor(row.cub)}`}>{cleanText(row.cub)}</div>
+                              <div className={`col-span-1 ${getTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</div>
+                              <div className={`col-span-1 ${getTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</div>
+                              <div className={`col-span-1 border-r-0 ${getTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</div>
+                            </div>
+                          ))}
                         </div>
 
                         {/* Footer */}
