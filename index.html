@@ -17,37 +17,37 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* --- ESTILOS DA TABELA (Baseado no seu código de exemplo) --- */
+        /* --- ESTILOS DA TABELA --- */
         
-        /* Header Principal (Fundo Cinza, Fonte Pesada) */
+        /* Header Principal */
         .th-main { 
-            @apply px-4 py-4 text-center align-middle text-[11px] font-black text-gray-600 uppercase tracking-[0.15em] bg-[#e9ecef] border-b border-r border-gray-300; 
+            @apply px-2 py-3 text-center align-middle text-[11px] font-black text-gray-600 uppercase tracking-wider bg-[#f8f9fa] border-b border-r border-gray-200; 
         }
         
-        /* Sub-Header (Fundo um pouco mais claro) */
+        /* Sub-Header (Var / Valor) */
         .th-sub { 
-            @apply px-2 py-2 text-center align-middle text-[10px] font-bold text-gray-500 uppercase tracking-wider bg-[#f8f9fa] border-b border-r border-gray-200 h-8; 
+            @apply px-2 py-2 text-center align-middle text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white border-b border-r border-gray-100 h-8; 
         }
 
         /* Célula de Dados */
         .td-cell { 
-            @apply px-4 py-3 whitespace-nowrap text-xs font-bold border-b border-r border-gray-200 text-center align-middle transition-colors text-gray-700; 
+            @apply px-2 py-3 whitespace-nowrap text-xs font-bold border-b border-r border-gray-100 text-center align-middle transition-colors; 
         }
         
         /* Coluna Sticky (Mês) */
         .sticky-col {
-            @apply sticky left-0 z-10 bg-[#e9ecef] border-r border-gray-300 font-black text-gray-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)];
+            @apply sticky left-0 z-10 bg-[#f8f9fa] border-r border-gray-200 font-black text-gray-600 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)];
         }
         
-        /* Sticky para o corpo da tabela (fundo branco para não misturar) */
+        /* Sticky para o corpo da tabela */
         .sticky-col-body {
-            @apply sticky left-0 z-10 bg-white border-r border-gray-200 font-black text-gray-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)];
+            @apply sticky left-0 z-10 bg-white border-r border-gray-100 font-bold text-gray-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.02)];
         }
 
         /* Cores utilitárias */
         .text-up { @apply text-green-600 font-black; }
         .text-down { @apply text-red-600 font-black; }
-        .text-neutral { @apply text-gray-400 font-medium; }
+        .text-neutral { @apply text-gray-500 font-semibold; } /* Cor para valores monetários */
         
         .animate-scale-in { animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -83,7 +83,9 @@
             'IPC-FIPE': { varKey: 'ipcfipe', hasValue: false }
         };
 
-        // --- Dados Fictícios ---
+        // --- Dados Fictícios (Strings) ---
+        // Nota: Os dados mantêm a formatação original (ex: 0,41%) para o painel, 
+        // mas vamos limpá-los na exibição da tabela conforme solicitado.
         const dadosPorAno = {
             '2026': [
                 { mes: 'Jan', igpm_var: '0,41%', igpm_val: '1.207,73', otn_var: '0,41%', otn_val: '128,44', ipca: '0,25%', ipcdi: '0,28%', ipcr: '-', cub: '-', igpdi: '-', inpc: '-', ipcfipe: '0,38%' },
@@ -116,10 +118,18 @@
             const dados = dadosPorAno[selectedYear] || [];
             const singleIndex = config.filterIndex ? indexConfig[config.filterIndex] : null;
 
+            // Função para limpar o texto (remover % e R$) para exibição na tabela
+            const cleanText = (val) => {
+                if (!val) return '-';
+                // Remove % e R$ e espaços extras
+                return val.replace('%', '').replace('R$', '').trim();
+            };
+
+            // Lógica de Cor: Se tem "-", é vermelho (Deflação). Se não, Verde (Inflação).
             const getTrendColor = (val) => {
-                if (!val || val.trim() === '-' || val.trim() === '') return 'text-neutral';
-                if (val.includes('-')) return 'text-down';
-                return 'text-up';
+                if (!val || val.trim() === '-' || val.trim() === '') return 'text-neutral'; // Traço ou vazio
+                if (val.includes('-')) return 'text-down'; // Negativo (Vermelho)
+                return 'text-up'; // Positivo (Verde)
             };
 
             return (
@@ -167,18 +177,18 @@
                                         // HEADER SIMPLES (Card View)
                                         <tr>
                                             <th className="th-main sticky-col">MÊS</th>
-                                            <th className="th-main">VARIAÇÃO</th>
+                                            <th className="th-main">VAR.</th>
                                             {singleIndex.hasValue && (
-                                                <th className="th-main text-green-700">VALOR (R$)</th>
+                                                <th className="th-main">VALOR</th>
                                             )}
                                         </tr>
                                     ) : (
-                                        // HEADER COMPLETO (Com a formatação solicitada)
+                                        // HEADER COMPLETO (Formatado)
                                         <>
                                             <tr>
                                                 <th rowSpan="2" className="th-main sticky-col border-b-2 border-gray-300">MÊS</th>
-                                                <th colSpan="2" className="th-main">IGP-M</th>
-                                                <th colSpan="2" className="th-main">OTN-MEI</th>
+                                                <th colSpan="2" className="th-main border-b-2 border-gray-300">IGP-M</th>
+                                                <th colSpan="2" className="th-main border-b-2 border-gray-300">OTN-MEI</th>
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300">IPCA</th>
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300">IPC-DI</th>
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300">IPC-R</th>
@@ -188,11 +198,11 @@
                                                 <th rowSpan="2" className="th-main border-b-2 border-gray-300 border-r-0">IPC-FIPE</th>
                                             </tr>
                                             <tr>
-                                                {/* Sub-header */}
-                                                <th className="th-sub border-b-2 border-gray-300 text-blue-600">%</th>
-                                                <th className="th-sub border-b-2 border-gray-300 text-blue-600">R$</th>
-                                                <th className="th-sub border-b-2 border-gray-300 text-green-600">%</th>
-                                                <th className="th-sub border-b-2 border-gray-300 text-green-600">R$</th>
+                                                {/* Sub-header (Var / Valor) */}
+                                                <th className="th-sub border-b-2 border-gray-300">VAR.</th>
+                                                <th className="th-sub border-b-2 border-gray-300">VALOR</th>
+                                                <th className="th-sub border-b-2 border-gray-300">VAR.</th>
+                                                <th className="th-sub border-b-2 border-gray-300">VALOR</th>
                                             </tr>
                                         </>
                                     )}
@@ -209,29 +219,32 @@
                                                 {singleIndex ? (
                                                     <>
                                                         <td className={`td-cell text-lg ${getTrendColor(row[singleIndex.varKey])}`}>
-                                                            {row[singleIndex.varKey]}
+                                                            {cleanText(row[singleIndex.varKey])}
                                                         </td>
                                                         {singleIndex.hasValue && (
-                                                            <td className="td-cell font-black text-gray-600 text-lg">
-                                                                {singleIndex.valKey === 'otn_val' ? 'R$ ' : ''}{row[singleIndex.valKey]}
+                                                            <td className="td-cell text-neutral text-lg">
+                                                                {cleanText(row[singleIndex.valKey])}
                                                             </td>
                                                         )}
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <td className={`td-cell bg-blue-50/10 ${getTrendColor(row.igpm_var)}`}>{row.igpm_var}</td>
-                                                        <td className="td-cell text-gray-500 bg-blue-50/10">{row.igpm_val}</td>
+                                                        {/* IGP-M */}
+                                                        <td className={`td-cell ${getTrendColor(row.igpm_var)}`}>{cleanText(row.igpm_var)}</td>
+                                                        <td className="td-cell text-neutral">{cleanText(row.igpm_val)}</td>
                                                         
-                                                        <td className={`td-cell bg-green-50/10 ${getTrendColor(row.otn_var)}`}>{row.otn_var}</td>
-                                                        <td className="td-cell font-black text-green-700 bg-green-50/10">R$ {row.otn_val}</td>
+                                                        {/* OTN-MEI (Sem o verde no valor, como pedido) */}
+                                                        <td className={`td-cell ${getTrendColor(row.otn_var)}`}>{cleanText(row.otn_var)}</td>
+                                                        <td className="td-cell text-neutral">{cleanText(row.otn_val)}</td>
                                                         
-                                                        <td className={`td-cell ${getTrendColor(row.ipca)}`}>{row.ipca}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.ipcdi)}`}>{row.ipcdi}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.ipcr)}`}>{row.ipcr}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.cub)}`}>{row.cub}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.igpdi)}`}>{row.igpdi}</td>
-                                                        <td className={`td-cell ${getTrendColor(row.inpc)}`}>{row.inpc}</td>
-                                                        <td className={`td-cell border-r-0 ${getTrendColor(row.ipcfipe)}`}>{row.ipcfipe}</td>
+                                                        {/* Outros Índices (Todos com lógica de cor) */}
+                                                        <td className={`td-cell ${getTrendColor(row.ipca)}`}>{cleanText(row.ipca)}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.ipcdi)}`}>{cleanText(row.ipcdi)}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.ipcr)}`}>{cleanText(row.ipcr)}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.cub)}`}>{cleanText(row.cub)}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.igpdi)}`}>{cleanText(row.igpdi)}</td>
+                                                        <td className={`td-cell ${getTrendColor(row.inpc)}`}>{cleanText(row.inpc)}</td>
+                                                        <td className={`td-cell border-r-0 ${getTrendColor(row.ipcfipe)}`}>{cleanText(row.ipcfipe)}</td>
                                                     </>
                                                 )}
                                             </tr>
