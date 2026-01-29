@@ -249,34 +249,35 @@
             <div className="min-h-screen bg-[#f0f0f0] font-sans text-gray-700">
               <HistoryModal config={modalConfig} onClose={closeModal} />
 
-              {/* HEADER: Fundo Branco, Textos Escuros (Revertido) */}
-              <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
+              {/* HEADER ALTERADO: Fundo AZUL (#0056b3), Textos Brancos */}
+              <header className="bg-[#0056b3] h-14 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
                 <div className="flex items-center gap-2">
                   <div className="bg-red-600 p-1 rounded">
                      <span className="text-white font-bold text-xl px-1">K</span>
                   </div>
                   <div className="leading-tight">
-                    <h1 className="font-bold text-lg text-[#333]">Kasil</h1>
-                    <p className="text-[10px] text-gray-400 -mt-1 uppercase tracking-widest">Intranet</p>
+                    <h1 className="font-bold text-lg text-white">Kasil</h1>
+                    <p className="text-[10px] text-blue-200 -mt-1 uppercase tracking-widest">Intranet</p>
                   </div>
                 </div>
 
                 <div className="flex-1 max-w-2xl px-10">
                   <div className="relative group">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#0056b3] transition-colors">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#0056b3] transition-colors">
                         <Search className="w-4 h-4" />
                     </div>
                     <input
                       type="text"
                       placeholder="Pesquise pelo site"
-                      className="w-full bg-gray-100 rounded py-1.5 pl-10 pr-4 text-sm border-none focus:ring-2 focus:ring-[#0056b3]/20 focus:bg-white transition-all outline-none"
+                      className="w-full bg-white rounded py-1.5 pl-10 pr-4 text-sm border-none focus:ring-2 focus:ring-white/50 focus:bg-white transition-all outline-none text-gray-700"
                     />
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-600">
+                <div className="flex items-center gap-4 text-sm text-white">
                   <span className="font-semibold text-xs tracking-tight">PEDRO HENRIQUE DA SILVA ROCHA</span>
-                  <div className="w-8 h-8 rounded-full bg-[#0056b3] text-white flex items-center justify-center font-bold shadow-sm">P</div>
+                  {/* Perfil */}
+                  <div className="w-8 h-8 rounded-full bg-white text-[#0056b3] flex items-center justify-center font-bold shadow-sm">P</div>
                 </div>
               </header>
 
@@ -291,7 +292,7 @@
                 
                 {/* PAINEL DE ÍNDICES */}
                 <div className="bg-white rounded-lg shadow-md border-t-4 border-[#0056b3] overflow-hidden mb-8 transition-shadow hover:shadow-lg">
-                    {/* CABEÇALHO DO PAINEL COM CORES INVERTIDAS */}
+                    {/* CABEÇALHO DO PAINEL */}
                     <div className="px-4 py-2 bg-[#0056b3] border-b border-blue-800 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <BarChart2 className="w-5 h-5 text-white" />
@@ -317,7 +318,7 @@
                             className="flex-none w-[150px] p-4 hover:bg-blue-50 cursor-pointer transition-all group relative"
                             title={`Clique para ver o histórico detalhado de ${item.nome}`}
                           >
-                            {/* ÍCONE DE TENDÊNCIA NO TOPO À DIREITA (ESTILO REFERENCE) */}
+                            {/* ÍCONE DE TENDÊNCIA */}
                             <div className="absolute top-2 right-2">
                                 {item.status === 'up' ? (
                                     <BoldArrowUp className="w-4 h-4 text-green-500" />
