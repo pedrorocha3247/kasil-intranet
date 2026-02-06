@@ -223,16 +223,16 @@
             return (
                 <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-scale-in">
                     <div className="bg-white w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-xl shadow-2xl flex flex-col font-inter">
-                        {/* Header Limpo (Diferente do painel econômico) */}
-                        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-white">
+                        {/* Header Azul (Igual aos painéis principais) */}
+                        <div className="flex justify-between items-center p-4 border-b border-blue-800 bg-[#0056b3]">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-blue-50 rounded-lg"><Activity className="w-6 h-6 text-[#0056b3]" /></div>
+                                <div className="p-2 bg-white/20 rounded-lg shadow-sm"><Activity className="w-6 h-6 text-white" /></div>
                                 <div>
-                                    <h2 className="text-xl font-black text-gray-800 uppercase tracking-wide">Indicadores Financeiros</h2>
-                                    <p className="text-xs text-gray-400 font-medium">Visão detalhada e tabelas de referência</p>
+                                    <h2 className="text-xl font-black text-white uppercase tracking-wide">Indicadores Financeiros</h2>
+                                    <p className="text-xs text-blue-200 font-bold uppercase tracking-wide opacity-90">Visão detalhada e tabelas de referência</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 rounded-full hover:bg-red-50"><X className="w-5 h-5" /></button>
+                            <button onClick={onClose} className="p-2 text-white hover:bg-white/20 transition-colors rounded-full"><X className="w-6 h-6" /></button>
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-8 bg-gray-50/50">
