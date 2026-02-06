@@ -383,15 +383,15 @@
           };
 
           const indicesEconomicos = [
-            { nome: 'IGP-M', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', status: 'up' },
+            { nome: 'IGP-M', mes: 'Jan/26', var: '0,41%', acumulado: '1.207,73', valor: '1.207,73', status: 'up' },
             { nome: 'OTN-MEI', mes: 'Jan/26', var: '0,41%', valor: '128,44', status: 'up' },
-            { nome: 'IPCA', mes: 'Jan/26', var: '0,25%', status: 'up' },
-            { nome: 'IPC-DI', mes: 'Dez/25', var: '0,28%', status: 'up' },
-            { nome: 'IPC-R', mes: 'Dez/25', var: '-0,01%', status: 'down' },
-            { nome: 'CUB', mes: 'Dez/25', var: '0,31%', status: 'up' },
-            { nome: 'IGP-DI', mes: 'Dez/25', var: '0,10%', status: 'up' },
-            { nome: 'INPC', mes: 'Nov/25', var: '0,03%', status: 'up' },
-            { nome: 'IPC-FIPE', mes: 'Jan/26', var: '0,38%', status: 'up' },
+            { nome: 'IPCA', mes: 'Jan/26', var: '0,25%', valor: '6.890,20', status: 'up' },
+            { nome: 'IPC-DI', mes: 'Dez/25', var: '0,28%', valor: '1.150,40', status: 'up' },
+            { nome: 'IPC-R', mes: 'Dez/25', var: '-0,01%', valor: '540,30', status: 'down' },
+            { nome: 'CUB', mes: 'Dez/25', var: '0,31%', valor: '2.300,15', status: 'up' },
+            { nome: 'IGP-DI', mes: 'Dez/25', var: '0,10%', valor: '1.180,90', status: 'up' },
+            { nome: 'INPC', mes: 'Nov/25', var: '0,03%', valor: '6.540,10', status: 'up' },
+            { nome: 'IPC-FIPE', mes: 'Jan/26', var: '0,38%', valor: '590,80', status: 'up' },
           ];
 
           const indicesIndicadores = [
@@ -442,7 +442,12 @@
                                  <div className="absolute top-2 right-2">{item.status === 'up' ? <BoldArrowUp className="w-4 h-4 text-green-500" /> : <BoldArrowDown className="w-4 h-4 text-red-500" />}</div>
                                  <div className="flex items-center justify-between mb-2"><span className="text-[11px] font-bold text-gray-600 group-hover:text-[#0056b3] transition-colors">{item.nome}</span></div>
                                  <div className="flex items-baseline gap-2"><span className={`text-lg font-bold leading-none ${item.status === 'up' ? 'text-up' : 'text-down'}`}>{item.var}</span></div>
-                                 <div className="mt-2 flex justify-between items-end"><span className="text-[9px] text-gray-400 font-medium uppercase">{item.mes}</span>{item.valor && ( <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-1 rounded">R$ {item.valor}</span> )}</div>
+                                 <div className="mt-2 flex justify-between items-end">
+                                    <span className="text-[9px] text-gray-400 font-medium uppercase">{item.mes}</span>
+                                    {item.valor && ( 
+                                      <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-1 rounded">R$ {item.valor}</span> 
+                                    )}
+                                 </div>
                                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#0056b3] opacity-0 hover:opacity-100 transition-opacity"></div>
                               </div>
                             ))}
